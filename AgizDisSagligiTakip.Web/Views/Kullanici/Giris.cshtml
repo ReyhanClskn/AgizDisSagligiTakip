@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Kullanıcı Girişi";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Kullanıcı Girişi</h3>
+                </div>
+                <div class="card-body">
+                    @if (TempData["BasariMesaji"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["BasariMesaji"]
+                        </div>
+                    }
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label class="form-label">E-posta</label>
+                            <input name="Email" class="form-control" type="email" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şifre</label>
+                            <input name="Sifre" class="form-control" type="password" required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Giriş Yap</button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a asp-action="Kayit" class="btn btn-link">Hesabınız yok mu? Kayıt olun</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
