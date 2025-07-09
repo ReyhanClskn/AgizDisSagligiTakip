@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgizDisSagligiTakip.Web", "AgizDisSagligiTakip.Web\AgizDisSagligiTakip.Web.csproj", "{35F75522-7791-41A7-BA3E-42EFF490A061}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgizDisSagligiTakip.Business", "AgizDisSagligiTakip.Business\AgizDisSagligiTakip.Business.csproj", "{669CF5D9-9E88-48C6-BB58-5664C15220E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgizDisSagligiTakip.Data", "AgizDisSagligiTakip.Data\AgizDisSagligiTakip.Data.csproj", "{15A005DD-8040-47CF-8553-481D19482272}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgizDisSagligiTakip.Core", "AgizDisSagligiTakip.Core\AgizDisSagligiTakip.Core.csproj", "{5E3E2A48-7EBD-4786-95C7-5CCFE3E16E4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgizDisSagligiTakip.Tests", "AgizDisSagligiTakip.Tests\AgizDisSagligiTakip.Tests.csproj", "{A86E533E-E268-4D04-9E36-1235E5769BE7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35F75522-7791-41A7-BA3E-42EFF490A061}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35F75522-7791-41A7-BA3E-42EFF490A061}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35F75522-7791-41A7-BA3E-42EFF490A061}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35F75522-7791-41A7-BA3E-42EFF490A061}.Release|Any CPU.Build.0 = Release|Any CPU
+		{669CF5D9-9E88-48C6-BB58-5664C15220E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{669CF5D9-9E88-48C6-BB58-5664C15220E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{669CF5D9-9E88-48C6-BB58-5664C15220E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{669CF5D9-9E88-48C6-BB58-5664C15220E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15A005DD-8040-47CF-8553-481D19482272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15A005DD-8040-47CF-8553-481D19482272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15A005DD-8040-47CF-8553-481D19482272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15A005DD-8040-47CF-8553-481D19482272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E3E2A48-7EBD-4786-95C7-5CCFE3E16E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E3E2A48-7EBD-4786-95C7-5CCFE3E16E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E3E2A48-7EBD-4786-95C7-5CCFE3E16E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E3E2A48-7EBD-4786-95C7-5CCFE3E16E4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A86E533E-E268-4D04-9E36-1235E5769BE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A86E533E-E268-4D04-9E36-1235E5769BE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A86E533E-E268-4D04-9E36-1235E5769BE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A86E533E-E268-4D04-9E36-1235E5769BE7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
