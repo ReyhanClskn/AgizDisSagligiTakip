@@ -2,62 +2,197 @@
     ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Ağız ve Diş Sağlığı Takip Uygulaması</h1>
-    
-    @if (TempData["BilgiMesaji"] != null)
-    {
-        <div class="alert alert-info">
-            @TempData["BilgiMesaji"]
-        </div>
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 0;
+        border-radius: 15px;
+        margin-bottom: 30px;
     }
+    .card-custom {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 20px;
+    }
+    .card-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+    .icon-box {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 30px;
+        color: white;
+    }
+    .icon-profile { background: linear-gradient(45deg, #ff6b6b, #feca57); }
+    .icon-health { background: linear-gradient(45deg, #48cae4, #023e8a); }
+    .icon-notes { background: linear-gradient(45deg, #51cf66, #087f5b); }
+    .btn-custom {
+        border-radius: 25px;
+        padding: 12px 30px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+    .btn-primary-custom {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+    }
+    .btn-primary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+    .recommendation-box {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin: 20px 0;
+    }
+    .stats-card {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+</style>
 
-    @if (Context.Session.GetInt32("KullaniciId") != null)
-    {
-        <div class="mt-4">
-            <h3>Hoş geldiniz, @Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")!</h3>
-            <p class="lead">Ağız ve diş sağlığınızı takip etmeye başlayabilirsiniz.</p>
-            
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Profil</h5>
-                            <p class="card-text">Profil bilgilerinizi görüntüleyin ve güncelleyin.</p>
-                            <a href="#" class="btn btn-primary">Profil Sayfası</a>
+@if (TempData["BilgiMesaji"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @TempData["BilgiMesaji"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (Context.Session.GetInt32("KullaniciId") != null)
+{
+    <div class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">🦷 Hoş Geldiniz!</h1>
+            <h2 class="mb-4">@Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")</h2>
+            <p class="lead">Ağız ve diş sağlığınızı takip etmeye devam edin!</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Menü Kartları -->
+            <div class="col-md-4">
+                <div class="card card-custom h-100">
+                    <div class="card-body text-center">
+                        <div class="icon-box icon-profile">
+                            👤
                         </div>
+                        <h5 class="card-title fw-bold">Profil Yönetimi</h5>
+                        <p class="card-text">Profil bilgilerinizi görüntüleyin ve güncelleyin.</p>
+                        <a asp-controller="Kullanici" asp-action="Profil" class="btn btn-primary-custom btn-custom">Profil Sayfası</a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Hedefler</h5>
-                            <p class="card-text">Ağız ve diş sağlığı hedeflerinizi yönetin.</p>
-                            <a href="#" class="btn btn-primary">Hedef Sayfası</a>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100">
+                    <div class="card-body text-center">
+                        <div class="icon-box icon-health">
+                            🦷
                         </div>
+                        <h5 class="card-title fw-bold">Diş Sağlığı Takibi</h5>
+                        <p class="card-text">Hedeflerinizi belirleyin ve günlük takibinizi yapın.</p>
+                        <a href="#" class="btn btn-primary-custom btn-custom">Sağlık Takibi</a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Notlar</h5>
-                            <p class="card-text">Günlük notlarınızı ekleyin ve görüntüleyin.</p>
-                            <a href="#" class="btn btn-primary">Not Sayfası</a>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100">
+                    <div class="card-body text-center">
+                        <div class="icon-box icon-notes">
+                            📝
                         </div>
+                        <h5 class="card-title fw-bold">Notlar & Fotoğraflar</h5>
+                        <p class="card-text">Günlük notlarınızı ve fotoğraflarınızı ekleyin.</p>
+                        <a href="#" class="btn btn-primary-custom btn-custom">Not Ekle</a>
                     </div>
                 </div>
             </div>
         </div>
-    }
-    else
-    {
-        <div class="mt-4">
-            <p class="lead">Ağız ve diş sağlığınızı takip etmek için giriş yapın veya kayıt olun.</p>
-            
-            <div class="mt-3">
-                <a asp-controller="Kullanici" asp-action="Kayit" class="btn btn-primary btn-lg me-3">Kayıt Ol</a>
-                <a asp-controller="Kullanici" asp-action="Giris" class="btn btn-outline-primary btn-lg">Giriş Yap</a>
+
+        <div class="row mt-4">
+            <!-- Rastgele Öneri -->
+            <div class="col-md-6">
+                <div class="recommendation-box">
+                    <h5 class="fw-bold mb-3">💡 Günün Önerisi</h5>
+                    <p class="mb-0">@ViewBag.RastgeleOneri</p>
+                </div>
+            </div>
+            <!-- Son 7 Gün İstatistikleri -->
+            <div class="col-md-6">
+                <div class="stats-card">
+                    <h5 class="fw-bold mb-3 text-dark">📊 Son 7 Gün Özeti</h5>
+                    <p class="text-dark mb-0">@ViewBag.Son7GunVerileri</p>
+                </div>
             </div>
         </div>
-    }
-</div>
+    </div>
+}
+else
+{
+    <div class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold mb-4">🦷 Ağız ve Diş Sağlığı Takip</h1>
+            <p class="lead mb-4">Diş sağlığınızı takip edin, hedefler belirleyin ve sağlıklı alışkanlıklar edinin!</p>
+            <div class="mt-4">
+                <a asp-controller="Kullanici" asp-action="Kayit" class="btn btn-light btn-custom btn-lg me-3">Kayıt Ol</a>
+                <a asp-controller="Kullanici" asp-action="Giris" class="btn btn-outline-light btn-custom btn-lg">Giriş Yap</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card card-custom text-center">
+                    <div class="card-body">
+                        <div class="icon-box icon-health">
+                            🎯
+                        </div>
+                        <h5 class="fw-bold">Hedef Belirleme</h5>
+                        <p>Günlük diş bakım hedeflerinizi belirleyin ve takip edin.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom text-center">
+                    <div class="card-body">
+                        <div class="icon-box icon-notes">
+                            📈
+                        </div>
+                        <h5 class="fw-bold">İlerleme Takibi</h5>
+                        <p>Günlük aktivitelerinizi kaydedin ve ilerlemenizi izleyin.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom text-center">
+                    <div class="card-body">
+                        <div class="icon-box icon-profile">
+                            💡
+                        </div>
+                        <h5 class="fw-bold">Kişisel Öneriler</h5>
+                        <p>Size özel sağlık önerileri alın ve alışkanlıklar geliştirin.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

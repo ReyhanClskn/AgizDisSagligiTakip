@@ -2,22 +2,23 @@ using Microsoft.AspNetCore.Mvc;
 using AgizDisSagligiTakip.Core.ViewModels;
 using AgizDisSagligiTakip.Core.Entities;
 using AgizDisSagligiTakip.Data.Context;
+using AgizDisSagligiTakip.Core.Helpers;
 using System.Text;
 using System.Security.Cryptography;
-using AgizDisSagligiTakip.Core.Helpers;
 
 namespace AgizDisSagligiTakip.Web.Controllers
 {
     public class KullaniciController : Controller
     {
         private readonly UygulamaDbContext _context;
-
         private readonly EmailService _emailService;
+        private readonly SifreleyiciService _sifreleyici;
 
         public KullaniciController(UygulamaDbContext context)
         {
             _context = context;
             _emailService = new EmailService();
+            _sifreleyici = new SifreleyiciService();
         }
 
         // GET: Kullanici/Kayit
@@ -41,13 +42,15 @@ namespace AgizDisSagligiTakip.Web.Controllers
                     return View(model);
                 }
 
+                var sifrelenmisSifre = SifreyiSifrele(model.Sifre);
+
                 // Yeni kullanıcı oluştur
                 var yeniKullanici = new Kullanici
                 {
                     Ad = model.Ad,
                     Soyad = model.Soyad,
                     Email = model.Email,
-                    Sifre = SifreyiSifrele(model.Sifre),
+                    Sifre = sifrelenmisSifre,  //TODO:
                     DogumTarihi = model.DogumTarihi,
                     KayitTarihi = DateTime.Now
                 };
@@ -82,7 +85,6 @@ namespace AgizDisSagligiTakip.Web.Controllers
         // GET: Kullanici/Giris
         public IActionResult Giris()
         {
-            //Console.WriteLine("=== GIRIS GET METODU ÇALIŞTI ===");
             return View();
         }
 
@@ -91,60 +93,43 @@ namespace AgizDisSagligiTakip.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Giris(KullaniciGirisViewModel model)
         {
-            // DEBUG 
-            //Console.WriteLine("=== GIRIS POST METODU ÇALIŞTI ===");
-            //Console.WriteLine($"Email: {model?.Email}");
-            //Console.WriteLine($"Sifre: {model?.Sifre}");
-            //Console.WriteLine($"ModelState Valid: {ModelState.IsValid}");
-            
             if (ModelState.IsValid)
             {
-                //Console.WriteLine("ModelState geçerli, kullanıcı aranıyor...");
-                
-                // Kullanıcıyı bul
-                // Kullanıcıyı bul
                 var kullanici = _context.Kullanicilar.FirstOrDefault(k => k.Email == model.Email);
                 
                 if (kullanici == null)
                 {
-                    //Console.WriteLine("Kullanıcı bulunamadı!");
                     ModelState.AddModelError("", "Kullanıcı bulunamadı.");
                     return View(model);
                 }
 
-                //Console.WriteLine("Kullanıcı bulundu, şifre kontrol ediliyor...");
-                
+                var sifreliGirilen = _sifreleyici.Sifrele(model.Sifre);
+                var kontrolSonucu = SifreKontrolEt(model.Sifre, kullanici.Sifre);
+
                 // Şifre kontrolü
-                // Şifre kontrolü
-                var sifrelenmisSifre = SifreyiSifrele(model.Sifre!);
-                if (kullanici.Sifre != sifrelenmisSifre)
+                if (!SifreKontrolEt(model.Sifre, kullanici.Sifre))
                 {
-                    //Console.WriteLine("Şifre hatalı!");
                     ModelState.AddModelError("", "Şifre hatalı.");
                     return View(model);
                 }
 
-                //Console.WriteLine("Şifre doğru, session oluşturuluyor...");
-                
                 // Session'a kullanıcı bilgisini kaydet
                 HttpContext.Session.SetInt32("KullaniciId", kullanici.Id);
                 HttpContext.Session.SetString("KullaniciAd", kullanici.Ad);
                 HttpContext.Session.SetString("KullaniciSoyad", kullanici.Soyad);
 
-                //Console.WriteLine("Başarılı giriş, ana sayfaya yönlendiriliyor...");
                 return RedirectToAction("Index", "Home");
             }
 
-            //Console.WriteLine("ModelState geçersiz!");
             return View(model);
         }
-        
-        // GET: Kullanici/Cikis 
+
+        // GET: Kullanici/Cikis
         public IActionResult Cikis()
         {
             // Session'ı temizle
             HttpContext.Session.Clear();
-
+            
             // Ana sayfaya yönlendir
             TempData["BilgiMesaji"] = "Başarıyla çıkış yaptınız.";
             return RedirectToAction("Index", "Home");
@@ -233,7 +218,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
             return View(model);
         }
 
-        // GET: Kullanici/ParolaHatirlat TODO:
+        // GET: Kullanici/ParolaHatirlat
         public IActionResult ParolaHatirlat()
         {
             return View();
@@ -265,7 +250,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 return View(model);
             }
 
-            // İkinci adım: Şifre güncelleme
+            // İkinci adım: Şifre güncelleme TODO:
             if (string.IsNullOrEmpty(model.YeniSifre) || string.IsNullOrEmpty(model.YeniSifreTekrar))
             {
                 ModelState.AddModelError("", "Lütfen yeni şifrenizi giriniz.");
@@ -286,16 +271,15 @@ namespace AgizDisSagligiTakip.Web.Controllers
             return View(model);
         }
 
-        // Şifre şifreleme metodu (Basit Hash) TODO: AES olmadı nedense
+        // AES Şifreleme TODO: Kriptoloji notlarına bak
         private string SifreyiSifrele(string sifre)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                var anahtar = "AgizDisSagligiTakip2024!";
-                var kombineSifre = sifre + anahtar;
-                var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(kombineSifre));
-                return Convert.ToBase64String(hashBytes);
-            }
+            return _sifreleyici.Sifrele(sifre);
+        }
+
+        private bool SifreKontrolEt(string girilenSifre, string veritabanindakiSifre)
+        {
+            return _sifreleyici.SifreKontrolEt(girilenSifre, veritabanindakiSifre);
         }
     }
 }

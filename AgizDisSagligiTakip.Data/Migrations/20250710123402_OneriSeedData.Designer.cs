@@ -4,6 +4,7 @@ using AgizDisSagligiTakip.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgizDisSagligiTakip.Data.Migrations
 {
     [DbContext(typeof(UygulamaDbContext))]
-    partial class UygulamaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250710123402_OneriSeedData")]
+    partial class OneriSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,56 +192,56 @@ namespace AgizDisSagligiTakip.Data.Migrations
                             Id = 1,
                             Aktif = true,
                             Metin = "Günde en az 2 kez diş fırçalamayı unutmayın!",
-                            OlusturmaTarihi = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            OlusturmaTarihi = new DateTime(2025, 7, 10, 15, 34, 2, 11, DateTimeKind.Local).AddTicks(7915)
                         },
                         new
                         {
                             Id = 2,
                             Aktif = true,
                             Metin = "Diş ipi kullanmak, diş fırçasının ulaşamadığı yerleri temizler.",
-                            OlusturmaTarihi = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            OlusturmaTarihi = new DateTime(2025, 7, 10, 15, 34, 2, 11, DateTimeKind.Local).AddTicks(8114)
                         },
                         new
                         {
                             Id = 3,
                             Aktif = true,
                             Metin = "Şekerli içecekleri sınırlandırın, dişleriniz size teşekkür edecek.",
-                            OlusturmaTarihi = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            OlusturmaTarihi = new DateTime(2025, 7, 10, 15, 34, 2, 11, DateTimeKind.Local).AddTicks(8115)
                         },
                         new
                         {
                             Id = 4,
                             Aktif = true,
                             Metin = "6 ayda bir diş hekimi kontrolü yaptırmayı ihmal etmeyin.",
-                            OlusturmaTarihi = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            OlusturmaTarihi = new DateTime(2025, 7, 10, 15, 34, 2, 11, DateTimeKind.Local).AddTicks(8116)
                         },
                         new
                         {
                             Id = 5,
                             Aktif = true,
                             Metin = "Ağız gargarası kullanarak ağız hijyeninizi destekleyin.",
-                            OlusturmaTarihi = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            OlusturmaTarihi = new DateTime(2025, 7, 10, 15, 34, 2, 11, DateTimeKind.Local).AddTicks(8117)
                         },
                         new
                         {
                             Id = 6,
                             Aktif = true,
                             Metin = "Diş fırçanızı 3 ayda bir değiştirin.",
-                            OlusturmaTarihi = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            OlusturmaTarihi = new DateTime(2025, 7, 10, 15, 34, 2, 11, DateTimeKind.Local).AddTicks(8118)
                         },
                         new
                         {
                             Id = 7,
                             Aktif = true,
                             Metin = "Sert fırçalama yerine nazik dairesel hareketler yapın.",
-                            OlusturmaTarihi = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            OlusturmaTarihi = new DateTime(2025, 7, 10, 15, 34, 2, 11, DateTimeKind.Local).AddTicks(8119)
                         },
                         new
                         {
                             Id = 8,
                             Aktif = true,
                             Metin = "Yemek sonrası 30 dakika bekleyip diş fırçalayın.",
-                            OlusturmaTarihi = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            OlusturmaTarihi = new DateTime(2025, 7, 10, 15, 34, 2, 11, DateTimeKind.Local).AddTicks(8120)
                         });
                 });
 

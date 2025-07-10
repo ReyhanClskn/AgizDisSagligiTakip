@@ -38,6 +38,18 @@ namespace AgizDisSagligiTakip.Data.Context
                 .WithMany(k => k.Notlar)
                 .HasForeignKey(n => n.KullaniciId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Varsayılan öneriler ekle
+            modelBuilder.Entity<Oneri>().HasData(
+                new Oneri { Id = 1, Metin = "Günde en az 2 kez diş fırçalamayı unutmayın!", Aktif = true, OlusturmaTarihi = new DateTime(2024, 1, 1) },
+                new Oneri { Id = 2, Metin = "Diş ipi kullanmak, diş fırçasının ulaşamadığı yerleri temizler.", Aktif = true, OlusturmaTarihi = new DateTime(2024, 1, 1) },
+                new Oneri { Id = 3, Metin = "Şekerli içecekleri sınırlandırın, dişleriniz size teşekkür edecek.", Aktif = true, OlusturmaTarihi = new DateTime(2024, 1, 1) },
+                new Oneri { Id = 4, Metin = "6 ayda bir diş hekimi kontrolü yaptırmayı ihmal etmeyin.", Aktif = true, OlusturmaTarihi = new DateTime(2024, 1, 1) },
+                new Oneri { Id = 5, Metin = "Ağız gargarası kullanarak ağız hijyeninizi destekleyin.", Aktif = true, OlusturmaTarihi = new DateTime(2024, 1, 1) },
+                new Oneri { Id = 6, Metin = "Diş fırçanızı 3 ayda bir değiştirin.", Aktif = true, OlusturmaTarihi = new DateTime(2024, 1, 1) },
+                new Oneri { Id = 7, Metin = "Sert fırçalama yerine nazik dairesel hareketler yapın.", Aktif = true, OlusturmaTarihi = new DateTime(2024, 1, 1) },
+                new Oneri { Id = 8, Metin = "Yemek sonrası 30 dakika bekleyip diş fırçalayın.", Aktif = true, OlusturmaTarihi = new DateTime(2024, 1, 1) }
+            );
         }
     }
 }
