@@ -1,4 +1,4 @@
-@model AgizDisSagligiTakip.Core.ViewModels.ParolaHatirlatKodViewModel
+@model AgizDisSagligiTakip.Core.ViewModels.ParolaHatirlatViewModel
 
 @{
     ViewData["Title"] = "Parola Hatırlatma";
@@ -12,10 +12,10 @@
                     <h3 class="text-center">Parola Hatırlatma</h3>
                 </div>
                 <div class="card-body">
-                    @if (TempData["BilgiMesaji"] != null)
+                    @if (TempData["BasariMesaji"] != null)
                     {
-                        <div class="alert alert-info">
-                            @TempData["BilgiMesaji"]
+                        <div class="alert alert-success">
+                            @TempData["BasariMesaji"]
                         </div>
                     }
 
@@ -31,43 +31,29 @@
 
                     <form method="post" action="/Kullanici/ParolaHatirlat">
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="Adim" value="@Model.Adim" />
+                        
+                        @if (Model?.EmailDogrulandi == true)
+                        {
+                            <input type="hidden" name="EmailDogrulandi" value="true" />
+                        }
+                        else
+                        {
+                            <input type="hidden" name="EmailDogrulandi" value="false" />
+                        }
 
-                        @if (Model.Adim == "EmailGirisi")
+                        <div class="mb-3">
+                            <label for="Email" class="form-label">E-posta</label>
+                            <input id="Email" name="Email" class="form-control" type="email" 
+                                   value="@(Model?.Email ?? "")" 
+                                   @(Model?.EmailDogrulandi == true ? "readonly" : "") required />
+                        </div>
+
+                        @if (Model?.EmailDogrulandi == true)
                         {
-                            <div class="mb-3">
-                                <label for="Email" class="form-label">E-posta</label>
-                                <input id="Email" name="Email" class="form-control" type="email" 
-                                       value="@Model.Email" required />
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Doğrulama Kodu Gönder</button>
-                            </div>
-                        }
-                        else if (Model.Adim == "KodDogrulama")
-                        {
-                            <input type="hidden" name="Email" value="@Model.Email" />
                             <div class="alert alert-success">
-                                <strong>@Model.Email</strong> adresine doğrulama kodu gönderildi.
-                                <br><small>(Geliştirme aşamasında kod konsola yazdırılmaktadır)</small>
+                                E-posta adresiniz doğrulandı. Şimdi yeni şifrenizi belirleyebilirsiniz.
                             </div>
-                            
-                            <div class="mb-3">
-                                <label for="DogrulamaKodu" class="form-label">Doğrulama Kodu (6 haneli)</label>
-                                <input id="DogrulamaKodu" name="DogrulamaKodu" class="form-control" type="text" 
-                                       maxlength="6" placeholder="123456" required />
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-success">Kodu Doğrula</button>
-                            </div>
-                        }
-                        else if (Model.Adim == "SifreGuncelleme")
-                        {
-                            <input type="hidden" name="Email" value="@Model.Email" />
-                            <div class="alert alert-success">
-                                Kod doğrulandı! Şimdi yeni şifrenizi belirleyebilirsiniz.
-                            </div>
-                            
+
                             <div class="mb-3">
                                 <label for="YeniSifre" class="form-label">Yeni Şifre</label>
                                 <input id="YeniSifre" name="YeniSifre" class="form-control" type="password" required />
@@ -80,7 +66,13 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Şifreyi Güncelle</button>
+                                <button type="submit" class="btn btn-success">Şifreyi Güncelle</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">E-posta Adresini Doğrula</button>
                             </div>
                         }
 

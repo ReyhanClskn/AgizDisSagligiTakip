@@ -6,6 +6,7 @@ namespace AgizDisSagligiTakip.Web.Controllers;
 
 public class HomeController : Controller
 {
+    //TODO: ?? logger
     private readonly ILogger<HomeController> _logger;
 
     public HomeController(ILogger<HomeController> logger)

@@ -1,0 +1,102 @@
+@model AgizDisSagligiTakip.Core.ViewModels.ProfilViewModel
+
+@{
+    ViewData["Title"] = "Profil";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Profil Bilgileri</h3>
+                </div>
+                <div class="card-body">
+                    @if (TempData["BasariMesaji"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["BasariMesaji"]
+                        </div>
+                    }
+
+                    @if (ViewData.ModelState.ErrorCount > 0)
+                    {
+                        <div class="alert alert-danger">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    }
+
+                    <form method="post" action="/Kullanici/Profil">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <input type="hidden" name="KayitTarihi" value="@Model.KayitTarihi" />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="Ad" class="form-label">Ad</label>
+                                    <input id="Ad" name="Ad" class="form-control" type="text" 
+                                           value="@Model.Ad" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="Soyad" class="form-label">Soyad</label>
+                                    <input id="Soyad" name="Soyad" class="form-control" type="text" 
+                                           value="@Model.Soyad" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Email" class="form-label">E-posta</label>
+                            <input id="Email" name="Email" class="form-control" type="email" 
+                                   value="@Model.Email" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="DogumTarihi" class="form-label">Doğum Tarihi</label>
+                            <input id="DogumTarihi" name="DogumTarihi" class="form-control" type="date" 
+                                   value="@Model.DogumTarihi.ToString("yyyy-MM-dd")" required />
+                        </div>
+
+                        <hr class="my-4">
+                        <h5>Şifre Değiştir (İsteğe Bağlı)</h5>
+                        <p class="text-muted">Şifrenizi değiştirmek istemiyorsanız bu alanları boş bırakın.</p>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="YeniSifre" class="form-label">Yeni Şifre</label>
+                                    <input id="YeniSifre" name="YeniSifre" class="form-control" type="password" />
+                                    <div class="form-text">En az 8 karakter, büyük-küçük harf ve rakam içermeli</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="YeniSifreTekrar" class="form-label">Yeni Şifre Tekrar</label>
+                                    <input id="YeniSifreTekrar" name="YeniSifreTekrar" class="form-control" type="password" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <div class="mb-3">
+                            <label class="form-label">Kayıt Tarihi</label>
+                            <input class="form-control" type="text" 
+                                   value="@Model.KayitTarihi.ToString("dd.MM.yyyy HH:mm")" readonly />
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/" class="btn btn-secondary me-md-2">Ana Sayfaya Dön</a>
+                            <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
