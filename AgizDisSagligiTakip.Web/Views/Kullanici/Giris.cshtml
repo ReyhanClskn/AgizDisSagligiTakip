@@ -1,3 +1,5 @@
+@model AgizDisSagligiTakip.Core.ViewModels.KullaniciGirisViewModel
+
 @{
     ViewData["Title"] = "Kullanıcı Girişi";
 }
@@ -17,15 +19,27 @@
                         </div>
                     }
 
-                    <form method="post">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    }
+
+                    <form method="post" action="/Kullanici/Giris">
+                        @Html.AntiForgeryToken()
+                        
                         <div class="mb-3">
-                            <label class="form-label">E-posta</label>
-                            <input name="Email" class="form-control" type="email" required />
+                            <label for="Email" class="form-label">E-posta</label>
+                            <input id="Email" name="Email" class="form-control" type="email" required />
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Şifre</label>
-                            <input name="Sifre" class="form-control" type="password" required />
+                            <label for="Sifre" class="form-label">Şifre</label>
+                            <input id="Sifre" name="Sifre" class="form-control" type="password" required />
                         </div>
 
                         <div class="d-grid">
@@ -33,7 +47,7 @@
                         </div>
 
                         <div class="text-center mt-3">
-                            <a asp-action="Kayit" class="btn btn-link">Hesabınız yok mu? Kayıt olun</a>
+                            <a href="/Kullanici/Kayit" class="btn btn-link">Hesabınız yok mu? Kayıt olun</a>
                         </div>
                     </form>
                 </div>

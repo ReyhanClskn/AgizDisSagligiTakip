@@ -1,8 +1,63 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Ana Sayfa";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Ağız ve Diş Sağlığı Takip Uygulaması</h1>
+    
+    @if (TempData["BilgiMesaji"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["BilgiMesaji"]
+        </div>
+    }
+
+    @if (Context.Session.GetInt32("KullaniciId") != null)
+    {
+        <div class="mt-4">
+            <h3>Hoş geldiniz, @Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")!</h3>
+            <p class="lead">Ağız ve diş sağlığınızı takip etmeye başlayabilirsiniz.</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Profil</h5>
+                            <p class="card-text">Profil bilgilerinizi görüntüleyin ve güncelleyin.</p>
+                            <a href="#" class="btn btn-primary">Profil Sayfası</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Hedefler</h5>
+                            <p class="card-text">Ağız ve diş sağlığı hedeflerinizi yönetin.</p>
+                            <a href="#" class="btn btn-primary">Hedef Sayfası</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Notlar</h5>
+                            <p class="card-text">Günlük notlarınızı ekleyin ve görüntüleyin.</p>
+                            <a href="#" class="btn btn-primary">Not Sayfası</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="mt-4">
+            <p class="lead">Ağız ve diş sağlığınızı takip etmek için giriş yapın veya kayıt olun.</p>
+            
+            <div class="mt-3">
+                <a asp-controller="Kullanici" asp-action="Kayit" class="btn btn-primary btn-lg me-3">Kayıt Ol</a>
+                <a asp-controller="Kullanici" asp-action="Giris" class="btn btn-outline-primary btn-lg">Giriş Yap</a>
+            </div>
+        </div>
+    }
 </div>

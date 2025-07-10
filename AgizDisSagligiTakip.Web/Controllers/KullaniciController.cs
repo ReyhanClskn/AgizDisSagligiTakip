@@ -25,7 +25,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
         // POST: Kullanici/Kayit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Kayit(KullaniciKayitViewModel model)
+        public IActionResult Kayit(KullaniciKayitViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -49,7 +49,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 };
 
                 _context.Kullanicilar.Add(yeniKullanici);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 // Başarı mesajı
                 TempData["BasariMesaji"] = "Kayıt işlemi başarıyla tamamlandı!";
@@ -62,29 +62,84 @@ namespace AgizDisSagligiTakip.Web.Controllers
         // GET: Kullanici/Giris
         public IActionResult Giris()
         {
+            //Console.WriteLine("=== GIRIS GET METODU ÇALIŞTI ===");
             return View();
         }
 
+        // POST: Kullanici/Giris
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Giris(KullaniciGirisViewModel model)
+        {
+            // DEBUG 
+            //Console.WriteLine("=== GIRIS POST METODU ÇALIŞTI ===");
+            //Console.WriteLine($"Email: {model?.Email}");
+            //Console.WriteLine($"Sifre: {model?.Sifre}");
+            //Console.WriteLine($"ModelState Valid: {ModelState.IsValid}");
+            
+            if (ModelState.IsValid)
+            {
+                //Console.WriteLine("ModelState geçerli, kullanıcı aranıyor...");
+                
+                // Kullanıcıyı bul
+                // Kullanıcıyı bul
+                var kullanici = _context.Kullanicilar.FirstOrDefault(k => k.Email == model.Email);
+                
+                if (kullanici == null)
+                {
+                    //Console.WriteLine("Kullanıcı bulunamadı!");
+                    ModelState.AddModelError("", "Kullanıcı bulunamadı.");
+                    return View(model);
+                }
+
+                //Console.WriteLine("Kullanıcı bulundu, şifre kontrol ediliyor...");
+                
+                // Şifre kontrolü
+                // Şifre kontrolü
+                var sifrelenmisSifre = SifreyiSifrele(model.Sifre!);
+                if (kullanici.Sifre != sifrelenmisSifre)
+                {
+                    //Console.WriteLine("Şifre hatalı!");
+                    ModelState.AddModelError("", "Şifre hatalı.");
+                    return View(model);
+                }
+
+                //Console.WriteLine("Şifre doğru, session oluşturuluyor...");
+                
+                // Session'a kullanıcı bilgisini kaydet
+                HttpContext.Session.SetInt32("KullaniciId", kullanici.Id);
+                HttpContext.Session.SetString("KullaniciAd", kullanici.Ad);
+                HttpContext.Session.SetString("KullaniciSoyad", kullanici.Soyad);
+
+                //Console.WriteLine("Başarılı giriş, ana sayfaya yönlendiriliyor...");
+                return RedirectToAction("Index", "Home");
+            }
+
+            //Console.WriteLine("ModelState geçersiz!");
+            return View(model);
+        }
+        
+        // GET: Kullanici/Cikis TODO:
+        public IActionResult Cikis()
+        {
+            // Session'ı temizle
+            HttpContext.Session.Clear();
+
+            // Ana sayfaya yönlendir
+            TempData["BilgiMesaji"] = "Başarıyla çıkış yaptınız.";
+            return RedirectToAction("Index", "Home");
+        }
+
         // Şifre şifreleme metodu
+        // Şifre şifreleme metodu (Basit Hash) TODO: AES olmadı nedense
         private string SifreyiSifrele(string sifre)
         {
-            using (var aes = Aes.Create())
+            using (var sha256 = SHA256.Create())
             {
-                var anahtar = "AgizDisSagligiTakip2024!"; // 24 karakter
-                var keyBytes = Encoding.UTF8.GetBytes(anahtar);
-                Array.Resize(ref keyBytes, 32); // 32 byte için resize
-
-                aes.Key = keyBytes;
-                aes.IV = new byte[16]; // 16 byte IV
-
-                using (var encryptor = aes.CreateEncryptor())
-                using (var msEncrypt = new MemoryStream())
-                using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                using (var swEncrypt = new StreamWriter(csEncrypt))
-                {
-                    swEncrypt.Write(sifre);
-                    return Convert.ToBase64String(msEncrypt.ToArray());
-                }
+                var anahtar = "AgizDisSagligiTakip2024!";
+                var kombineSifre = sifre + anahtar;
+                var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(kombineSifre));
+                return Convert.ToBase64String(hashBytes);
             }
         }
     }
