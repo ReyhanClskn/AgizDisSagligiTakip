@@ -119,7 +119,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
             return View(model);
         }
         
-        // GET: Kullanici/Cikis TODO:
+        // GET: Kullanici/Cikis 
         public IActionResult Cikis()
         {
             // Session'ı temizle
@@ -128,6 +128,113 @@ namespace AgizDisSagligiTakip.Web.Controllers
             // Ana sayfaya yönlendir
             TempData["BilgiMesaji"] = "Başarıyla çıkış yaptınız.";
             return RedirectToAction("Index", "Home");
+        }
+
+        // GET: Kullanici/ParolaHatirlat TODO:
+        public IActionResult ParolaHatirlat()
+        {
+            var model = new ParolaHatirlatKodViewModel();
+            return View(model);
+        }
+
+        // POST: Kullanici/ParolaHatirlat
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ParolaHatirlat(ParolaHatirlatKodViewModel model)
+        {
+            if (model.Adim == "EmailGirisi")
+            {
+                // 1. Adım: Email kontrolü
+                if (string.IsNullOrEmpty(model.Email))
+                {
+                    ModelState.AddModelError("Email", "E-posta adresi gereklidir.");
+                    return View(model);
+                }
+
+                var kullanici = _context.Kullanicilar.FirstOrDefault(k => k.Email == model.Email);
+                if (kullanici == null)
+                {
+                    ModelState.AddModelError("Email", "Bu e-posta adresine kayıtlı kullanıcı bulunamadı.");
+                    return View(model);
+                }
+
+                // Rastgele 6 haneli kod oluştur
+                var random = new Random();
+                var kod = random.Next(100000, 999999).ToString();
+
+                // Session'a kaydet
+                HttpContext.Session.SetString("ParolaHatirlatKod", kod);
+                HttpContext.Session.SetString("ParolaHatirlatEmail", model.Email);
+                HttpContext.Session.SetString("KodGondermeZamani", DateTime.Now.ToString());
+
+                // Konsola yazdır (gerçek uygulamada email gönderilir)
+                Console.WriteLine($"=== PAROLA HATIRLATMA KODU ===");
+                Console.WriteLine($"Email: {model.Email}");
+                Console.WriteLine($"Kod: {kod}");
+                Console.WriteLine($"===========================");
+
+                model.Adim = "KodDogrulama";
+                TempData["BilgiMesaji"] = $"Doğrulama kodu oluşturuldu. (Konsola bakınız: {kod})";
+                return View(model);
+            }
+            else if (model.Adim == "KodDogrulama")
+            {
+                // 2. Adım: Kod doğrulama
+                var sessionKod = HttpContext.Session.GetString("ParolaHatirlatKod");
+                var sessionEmail = HttpContext.Session.GetString("ParolaHatirlatEmail");
+
+                if (string.IsNullOrEmpty(sessionKod) || sessionEmail != model.Email)
+                {
+                    ModelState.AddModelError("", "Oturum süresi doldu. Lütfen tekrar deneyin.");
+                    return View(new ParolaHatirlatKodViewModel());
+                }
+
+                if (model.DogrulamaKodu != sessionKod)
+                {
+                    ModelState.AddModelError("DogrulamaKodu", "Doğrulama kodu hatalı.");
+                    model.Adim = "KodDogrulama";
+                    return View(model);
+                }
+
+                model.Adim = "SifreGuncelleme";
+                return View(model);
+            }
+            else if (model.Adim == "SifreGuncelleme")
+            {
+                // 3. Adım: Şifre güncelleme
+                if (string.IsNullOrEmpty(model.YeniSifre) || string.IsNullOrEmpty(model.YeniSifreTekrar))
+                {
+                    ModelState.AddModelError("", "Lütfen yeni şifrenizi giriniz.");
+                    model.Adim = "SifreGuncelleme";
+                    return View(model);
+                }
+
+                if (model.YeniSifre != model.YeniSifreTekrar)
+                {
+                    ModelState.AddModelError("YeniSifreTekrar", "Şifreler eşleşmiyor.");
+                    model.Adim = "SifreGuncelleme";
+                    return View(model);
+                }
+
+                var sessionEmail = HttpContext.Session.GetString("ParolaHatirlatEmail");
+                var kullanici = _context.Kullanicilar.FirstOrDefault(k => k.Email == sessionEmail);
+                
+                if (kullanici != null)
+                {
+                    kullanici.Sifre = SifreyiSifrele(model.YeniSifre);
+                    _context.SaveChanges();
+
+                    // Session'ı temizle
+                    HttpContext.Session.Remove("ParolaHatirlatKod");
+                    HttpContext.Session.Remove("ParolaHatirlatEmail");
+                    HttpContext.Session.Remove("KodGondermeZamani");
+
+                    TempData["BasariMesaji"] = "Şifreniz başarıyla güncellendi!";
+                    return RedirectToAction("Giris");
+                }
+            }
+
+            return View(model);
         }
 
         // Şifre şifreleme metodu
