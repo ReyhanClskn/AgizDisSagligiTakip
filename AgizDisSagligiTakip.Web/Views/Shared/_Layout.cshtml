@@ -22,6 +22,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
                         </li>
+                        <li class="nav-item"></li>
+                            <a class="nav-link text-dark" asp-controller="Hedef" asp-action="Index">🦷 Ağız ve Diş Sağlığı</a>
+                        </li>
+                        
                     </ul>
                     <ul class="navbar-nav">
                         @if (Context.Session.GetInt32("KullaniciId") != null)

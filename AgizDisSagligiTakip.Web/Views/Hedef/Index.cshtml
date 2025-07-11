@@ -1,0 +1,302 @@
+@model List<AgizDisSagligiTakip.Core.Entities.Hedef>
+
+@{
+    ViewData["Title"] = "Ağız ve Diş Sağlığı Takibi";
+}
+
+<style>
+    .nav-pills .nav-link.active {
+        background: linear-gradient(45deg, #48cae4, #023e8a);
+    }
+    .card-custom {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .badge-onem-dusuk { background: linear-gradient(45deg, #6dc57b, #087f28); }
+    .badge-onem-orta { background: linear-gradient(45deg, #ffd57b, #ffba43); }
+    .badge-onem-yuksek { background: linear-gradient(45deg, #ff6565, #8b1d11); }
+    .recommendation-box {
+        background: linear-gradient(135deg, #48cae4 0%, #023e8a 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">🦷 Ağız ve Diş Sağlığı Takibi</h2>
+            
+            @if (TempData["BasariMesaji"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show">
+                    @TempData["BasariMesaji"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @if (TempData["HataMesaji"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show">
+                    @TempData["HataMesaji"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Rastgele Öneri -->
+            <div class="recommendation-box">
+                <h5 class="fw-bold mb-3">💡 Günün Önerisi</h5>
+                <p class="mb-0">@ViewBag.RastgeleOneri</p>
+            </div>
+
+            <!-- Sekmeler -->
+            <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-durum-tab" data-bs-toggle="pill" data-bs-target="#pills-durum" type="button" role="tab">
+                        📊 Durum
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-hedef-tab" data-bs-toggle="pill" data-bs-target="#pills-hedef" type="button" role="tab">
+                        🎯 Hedefler
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Sekme İçerikleri -->
+            <div class="tab-content" id="pills-tabContent">
+                <!-- Durum Sekmesi -->
+                <div class="tab-pane fade show active" id="pills-durum" role="tabpanel">
+                    <div class="row">
+                        <!-- Sol Kolon: Son 7 Gün + Kayıt Formları -->
+                        <div class="col-md-8">
+                            <!-- Son 7 Gün Özeti -->
+                            <div class="card card-custom">
+                                <div class="card-header">
+                                    <h5 class="mb-0">📅 Son 7 Gün Özeti</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (ViewBag.Son7GunKayitlari != null && ((List<AgizDisSagligiTakip.Core.Entities.HedefKaydi>)ViewBag.Son7GunKayitlari).Any())
+                                    {
+                                        @foreach (var kayit in (List<AgizDisSagligiTakip.Core.Entities.HedefKaydi>)ViewBag.Son7GunKayitlari)
+                                        {
+                                            <div class="mb-2 p-2 bg-light rounded">
+                                                <strong>@kayit.Hedef.Baslik</strong> - 
+                                                @kayit.Tarih.ToString("dd.MM.yyyy") @kayit.Saat.ToString(@"hh\:mm")
+                                                @if (kayit.Uygulandi)
+                                                {
+                                                    <span class="badge" style="background: linear-gradient(45deg, 
+                                                    #53b76a, #28a745);">✓ Uygulandı</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge" style="background: linear-gradient(45deg,
+                                                    #ba3d3d, #a31a1a);">⚠ Uygulanmadı</span>
+                                                }
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted">Henüz kayıt bulunmuyor.</p>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Hedef Kayıt Formları -->
+                            @if (Model.Any())
+                            {
+                                <div class="card card-custom">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">📝 Hedef Kayıt Formları</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @foreach (var hedef in Model)
+                                        {
+                                            <div class="mb-4 p-3 border rounded">
+                                                <h6 class="fw-bold">@hedef.Baslik</h6>
+                                                <form asp-action="KayitEkle" method="post" class="row g-2">
+                                                    <input type="hidden" name="HedefId" value="@hedef.Id" />
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">Tarih</label>
+                                                        <input name="Tarih" type="date" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="form-label">Saat</label>
+                                                        <input name="Saat" type="time" class="form-control" value="@DateTime.Now.ToString("HH:mm")" required />
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">Süre (dk)</label>
+                                                        <input name="Sure" type="number" class="form-control" min="0" max="1440" />
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">Uygulandı</label>
+                                                        <select name="Uygulandi" class="form-select" required>
+                                                            <option value="true">Evet</option>
+                                                            <option value="false">Hayır</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="form-label">&nbsp;</label>
+                                                        <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Sağ Kolon: Not Ekleme -->
+                        <div class="col-md-4">
+                            <div class="card card-custom">
+                                <div class="card-header">
+                                    <h5 class="mb-0">📝 Not Ekle</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form asp-action="NotEkle" method="post">
+                                        <div class="mb-3">
+                                            <label class="form-label">Açıklama</label>
+                                            <textarea name="Aciklama" class="form-control" rows="4" placeholder="Bugünkü deneyiminizi yazın..." required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-success w-100">Not Ekle</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Son Notlar -->
+                            @if (ViewBag.Notlar != null && ((List<AgizDisSagligiTakip.Core.Entities.Not>)ViewBag.Notlar).Any())
+                            {
+                                <div class="card card-custom">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">📋 Son Notlar</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        @foreach (var not in (List<AgizDisSagligiTakip.Core.Entities.Not>)ViewBag.Notlar)
+                                        {
+                                            <div class="mb-2 p-2 bg-light rounded">
+                                                <small class="text-muted">@not.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</small>
+                                                <p class="mb-0">@not.Aciklama</p>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hedef Sekmesi -->
+                <div class="tab-pane fade" id="pills-hedef" role="tabpanel">
+                    <div class="row">
+                        <!-- Mevcut Hedefler -->
+                        <div class="col-md-8">
+                            <div class="card card-custom">
+                                <div class="card-header">
+                                    <h5 class="mb-0">🎯 Mevcut Hedefler</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (Model.Any())
+                                    {
+                                        @foreach (var hedef in Model)
+                                        {
+                                            <div class="mb-3 p-3 border rounded">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <h6 class="fw-bold">@hedef.Baslik</h6>
+                                                        @if (!string.IsNullOrEmpty(hedef.Aciklama))
+                                                        {
+                                                            <p class="text-muted mb-2">@hedef.Aciklama</p>
+                                                        }
+                                                        <div>
+                                                            <span class="badge bg-info">@hedef.Periyot.ToString()</span>
+                                                            <span class="badge @(hedef.OnemDerecesi.ToString() == "Dusuk" ? "badge-onem-dusuk" : 
+                                                                                hedef.OnemDerecesi.ToString() == "Orta" ? "badge-onem-orta" : "badge-onem-yuksek")">
+                                                                @hedef.OnemDerecesi.ToString()
+                                                            </span>
+                                                            <small class="text-muted ms-2">@hedef.OlusturmaTarihi.ToString("dd.MM.yyyy")</small>
+                                                        </div>
+                                                    </div>
+                                                    <form asp-action="HedefSil" method="post" style="display: inline;">
+                                                        <input type="hidden" name="id" value="@hedef.Id" />
+                                                        <button type="submit" class="btn btn-outline-danger btn-sm" 
+                                                                onclick="return confirm('Bu hedefi silmek istediğinizden emin misiniz?')">
+                                                            🗑 Sil
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted">Henüz hedef oluşturmadınız. Sağ taraftan yeni hedef ekleyebilirsiniz.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Yeni Hedef Ekleme -->
+                        <div class="col-md-4">
+                            <div class="card card-custom">
+                                <div class="card-header">
+                                    <h5 class="mb-0">➕ Yeni Hedef Ekle</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form asp-action="YeniHedef" method="post">
+                                        <div class="mb-3">
+                                            <label class="form-label">Başlık</label>
+                                            <input name="Baslik" type="text" class="form-control" placeholder="Örn: Diş fırçalama" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Açıklama</label>
+                                            <textarea name="Aciklama" class="form-control" rows="3" placeholder="Hedef detayları..."></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Periyot</label>
+                                            <select name="Periyot" class="form-select" required>
+                                                <option value="">Seçiniz</option>
+                                                <option value="1">Günlük</option>
+                                                <option value="2">Haftalık</option>
+                                                <option value="3">Aylık</option>
+                                                <option value="4">6 Aylık</option>
+                                                <option value="5">Yıllık</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Önem Derecesi</label>
+                                            <select name="OnemDerecesi" class="form-select" required>
+                                                <option value="">Seçiniz</option>
+                                                <option value="1">Düşük</option>
+                                                <option value="2">Orta</option>
+                                                <option value="3">Yüksek</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Hedef Oluştur</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sekme geçişlerini Bootstrap ile aktif etme TODO: 
+    var triggerTabList = [].slice.call(document.querySelectorAll('#pills-tab button'))
+    triggerTabList.forEach(function (triggerEl) {
+        var tabTrigger = new bootstrap.Tab(triggerEl)
+        triggerEl.addEventListener('click', function (event) {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+    })
+</script>
