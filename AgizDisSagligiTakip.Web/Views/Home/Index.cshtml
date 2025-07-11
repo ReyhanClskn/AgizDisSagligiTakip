@@ -4,22 +4,41 @@
 
 <style>
     .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: radial-gradient(circle,rgba(138, 157, 166, 1) 0%, rgba(0, 36, 74, 1) 100%);
         color: white;
         padding: 60px 0;
         border-radius: 15px;
         margin-bottom: 30px;
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.08), 0 8px 25px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    /* Hero section buton hover */
+    .btn-light:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
+        transition: all 0.3s ease !important;
+    }
+    .btn-outline-light:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 15px rgba(255,255,255,0.3) !important;
+        transition: all 0.3s ease !important;
+        background-color: rgba(255,255,255,0.1) !important;
     }
     .card-custom {
         border: none;
         border-radius: 15px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.08), 0 8px 25px rgba(0,0,0,0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         margin-bottom: 20px;
     }
     .card-custom:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        transform: translateY(-5px) !important;
+        box-shadow: 0 -8px 25px rgba(0,0,0,0.12), 0 15px 35px rgba(0,0,0,0.15) !important;
+    }
+    /* Diş sağlığı kartının hover'ını kapat */
+    .card-custom.no-hover:hover {
+        transform: none !important;
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.08), 0 8px 25px rgba(0,0,0,0.1) !important;
     }
     .icon-box {
         width: 70px;
@@ -48,23 +67,35 @@
         border: none;
         color: white;
     }
+
+    btn-outline-light:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 15px rgba(255,255,255,0.3) !important;
+        transition: all 0.3s ease !important;
+        background-color: rgba(255,255,255,0.1) !important;
+    }
+    <!--TODO: Nasıl düzeldi anlamadım ama oldu sakin ELLEME-->
     .btn-primary-custom:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
     }
-    .recommendation-box {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        color: white;
-        padding: 25px;
-        border-radius: 15px;
+    .recommendation-box, .stats-card {
+        height: 250px; 
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
         margin: 20px 0;
+        border-radius: 15px;
+        padding: 25px;
+    }
+    .recommendation-box {
+        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        color: white;
+        text-align: center;
     }
     .stats-card {
-        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        padding: 20px;
-        border-radius: 15px;
+        background: linear-gradient(135deg, #8A9DA6 0%, #00244A 100%);
         text-align: center;
-        margin-bottom: 20px;
     }
 </style>
 
@@ -88,40 +119,17 @@
 
     <div class="container">
         <div class="row">
-            <!-- Menü Kartları -->
-            <div class="col-md-4">
-                <div class="card card-custom h-100">
-                    <div class="card-body text-center">
-                        <div class="icon-box icon-profile">
-                            👤
-                        </div>
-                        <h5 class="card-title fw-bold">Profil Yönetimi</h5>
-                        <p class="card-text">Profil bilgilerinizi görüntüleyin ve güncelleyin.</p>
-                        <a asp-controller="Kullanici" asp-action="Profil" class="btn btn-primary-custom btn-custom">Profil Sayfası</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100">
+            <!-- Tek Kart: Diş Sağlığı Takibi -->
+            <div class="col-md-12 mb-4">
+                <div class="card card-custom no-hover h-100" style="background: linear-gradient(90deg,rgba(0, 36, 74, 1) 0%,
+                 rgba(159, 179, 196, 1) 50%, rgba(0, 36, 74, 1) 100%);">
                     <div class="card-body text-center">
                         <div class="icon-box icon-health">
                             🦷
                         </div>
                         <h5 class="card-title fw-bold">Diş Sağlığı Takibi</h5>
                         <p class="card-text">Hedeflerinizi belirleyin ve günlük takibinizi yapın.</p>
-                        <a asp-controller="Hedef" asp-action="Index" class="btn btn-primary-custom btn-custom">Sağlık Takibi</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100">
-                    <div class="card-body text-center">
-                        <div class="icon-box icon-notes">
-                            📝
-                        </div>
-                        <h5 class="card-title fw-bold">Notlar & Fotoğraflar</h5> <!-- Güncellenecek TODO:-->
-                        <p class="card-text">Günlük notlarınızı ve fotoğraflarınızı ekleyin.</p>
-                        <a href="#" class="btn btn-primary-custom btn-custom">Not Ekle</a>
+                        <a asp-controller="Hedef" asp-action="Index" class="btn btn-outline-light btn-custom btn-lg">Diş Sağlığı Takibi</a>
                     </div>
                 </div>
             </div>
@@ -131,15 +139,27 @@
             <!-- Rastgele Öneri -->
             <div class="col-md-6">
                 <div class="recommendation-box">
-                    <h5 class="fw-bold mb-3">💡 Günün Önerisi</h5>
+                    <h5 class="fw-bold mb-3 text-light">💡 Günün Önerisi</h5>
                     <p class="mb-0">@ViewBag.RastgeleOneri</p>
                 </div>
             </div>
             <!-- Son 7 Gün İstatistikleri -->
             <div class="col-md-6">
                 <div class="stats-card">
-                    <h5 class="fw-bold mb-3 text-dark">📊 Son 7 Gün Özeti</h5>
-                    <p class="text-dark mb-0">@ViewBag.Son7GunVerileri</p>
+                    <h5 class="fw-bold mb-3 text-light">📊 Son 7 Gün Özeti</h5>
+                    @if (ViewBag.Son7GunKayitlari != null)
+                    {
+                        @foreach (dynamic kayit in ViewBag.Son7GunKayitlari)
+                        {
+                            <div class="mb-1 text-light small">
+                                • @kayit.HedefBaslik - @kayit.Tarih @kayit.Saat @kayit.Uygulandi
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-dark mb-0">Henüz kayıt bulunmuyor.</p>
+                    }
                 </div>
             </div>
         </div>
@@ -167,7 +187,7 @@ else
                             🎯
                         </div>
                         <h5 class="fw-bold">Hedef Belirleme</h5>
-                        <p>Günlük diş bakım hedeflerinizi belirleyin ve takip edin.</p>
+                        <p>Diş bakım hedeflerinizi belirleyin ve takip edin.</p>
                     </div>
                 </div>
             </div>

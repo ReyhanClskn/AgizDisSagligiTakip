@@ -7,48 +7,94 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AgizDisSagligiTakip.Web.styles.css" asp-append-version="true" />
+    <style>
+        /* Sticky Footer CSS */
+        html, body {
+            height: 100%;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        main {
+            flex: 1 0 auto;
+        }
+        
+        footer {
+            flex-shrink: 0;
+        }
+    </style>
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"></nav>
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark py-3 fixed-top shadow" 
+        style="background: linear-gradient(90deg,rgba(0, 36, 74, 1) 0%, rgba(159, 179, 196, 1) 50%, rgba(0, 36, 74, 1) 100%);">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Ağız ve Diş Sağlığı Takip</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Logo/Brand -->
+                <a class="navbar-brand fw-bold me-4" asp-controller="Home" asp-action="Index">
+                    🦷 Ağız ve Diş Sağlığı Takip
+                </a>
+                
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                
+                <!-- Navbar İçerik -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <!-- Sol Menü -->
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                            <a class="nav-link text-white px-3" asp-controller="Home" asp-action="Index">
+                                🏠 Ana Sayfa
+                            </a>
                         </li>
-                        <li class="nav-item"></li>
-                            <a class="nav-link text-dark" asp-controller="Hedef" asp-action="Index">🦷 Ağız ve Diş Sağlığı</a>
-                        </li>
-                        
-                    </ul>
-                    <ul class="navbar-nav">
                         @if (Context.Session.GetInt32("KullaniciId") != null)
                         {
                             <li class="nav-item">
-                                <span class="navbar-text">
-                                    Hoş geldin, @Context.Session.GetString("KullaniciAd")!
-                                </span>
+                                <a class="nav-link text-white px-3" asp-controller="Hedef" asp-action="Index">
+                                    🦷 Sağlık Takibi
+                                </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Kullanici" asp-action="Profil">Profil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Kullanici" asp-action="Cikis">Çıkış</a>
+                        }
+                    </ul>
+                    
+                    <!-- Sağ Kullanıcı Menüsü -->
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetInt32("KullaniciId") != null)
+                        {
+                            <!-- Kullanıcı Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                    <!-- Avatar -->
+                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">
+                                        <span class="fw-bold text-dark small">
+                                            @(Context.Session.GetString("KullaniciAd")?.Substring(0, 1).ToUpper() ?? "U")
+                                        </span>
+                                    </div>
+                                    @Context.Session.GetString("KullaniciAd")
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><h6 class="dropdown-header">@Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")</h6></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-controller="Kullanici" asp-action="Profil">👤 Profil</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" asp-controller="Kullanici" asp-action="Cikis">🚪 Çıkış</a></li>
+                                </ul>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Kullanici" asp-action="Kayit">Kayıt Ol</a>
+                                <a class="nav-link text-white px-3" asp-controller="Kullanici" asp-action="Giris">🔑 Giriş</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Kullanici" asp-action="Giris">Giriş Yap</a>
+                                <a class="nav-link text-white px-3" asp-controller="Kullanici" asp-action="Kayit">📝 Kayıt</a>
                             </li>
                         }
                     </ul>
@@ -56,17 +102,34 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+    <main role="main" class="pb-3" style="padding-top: 140px;">
         <div class="container">
-            &copy; 2025 - AgizDisSagligiTakip.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="py-4 text-white" style="background: linear-gradient(90deg,rgba(0, 36, 74, 1) 0%,
+     rgba(159, 179, 196, 1) 50%, rgba(0, 36, 74, 1) 100%);">
+        <div class="container">
+            <div class="row">
+                <!-- Sol taraf -->
+                <div class="col-md-6">
+                    <h5 class="fw-bold">🦷 Ağız ve Diş Sağlığı Takip</h5>
+                    <p class="mb-0">Sağlıklı gülüşler için en iyi takip uygulaması.</p>
+                </div>
+                <!-- Sağ taraf -->
+                <div class="col-md-6 text-md-end">
+                    <div class="mb-2">
+                        <a href="#" class="text-white text-decoration-none me-3">Hakkımızda</a>
+                        <a asp-controller="Home" asp-action="Privacy" class="text-white text-decoration-none me-3">Gizlilik</a>
+                        <a href="#" class="text-white text-decoration-none">İletişim</a>
+                    </div>
+                    <small class="text-light">© 2025 - AgizDisSagligiTakip.Web</small>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
