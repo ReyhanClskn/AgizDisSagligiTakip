@@ -4,12 +4,38 @@
     ViewData["Title"] = "Profil";
 }
 
+<style>
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.card-header {
+    background: #00244A !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 15px 15px 0 0 !important;
+    margin: 0;
+    padding: 1.25rem;
+}
+
+.form-control {
+    border-radius: 8px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+</style>
+
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Profil Bilgileri</h3>
+                <div class="card-header text-white" style="background: #00244A;"></div>
+                    <h3 class="text-center mb-0">Profil Bilgileri</h3>
                 </div>
                 <div class="card-body">
                     @if (TempData["BasariMesaji"] != null)
@@ -92,7 +118,9 @@
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="/" class="btn btn-secondary me-md-2">Ana Sayfaya Dön</a>
-                            <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
+                            <button type="submit" class="btn" style="background: #00244A; color: white; border: none;"></button>
+                                Bilgileri Güncelle
+                            </button>
                         </div>
                     </form>
                 </div>

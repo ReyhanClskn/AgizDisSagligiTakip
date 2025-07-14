@@ -5,8 +5,112 @@
 }
 
 <style>
+    /* Sade ve güzel tasarım */
+    .nav-pills .nav-link {
+        border-radius: 25px;
+        padding: 12px 24px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-right: 10px;
+        color: #00244A !important;
+    }
+
+    .nav-pills .nav-link:hover {
+        background-color: rgba(13, 110, 253, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .card-custom {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background: radial-gradient(circle, rgba(138, 157, 166, 1) 0%, rgba(0, 36, 74, 1) 100%) !important;
+        color: white !important;
+        border: none;
+        padding: 20px 25px;
+        border-radius: 20px 20px 0 0 !important;
+    }
+
+    .card-header h5 {
+        margin: 0;
+        font-weight: 600;
+        color: white !important;
+    }
+
+    .card-body {
+        padding: 25px;
+    }
+
+    /* Form stilleri */
+    .form-control {
+        border-radius: 12px;
+        border: 2px solid #e9ecef;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1);
+    }
+
+    .btn {
+        border-radius: 12px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Kayıt kartları */
+    .bg-light {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .bg-light:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Badge stilleri */
+    .badge {
+        border-radius: 20px;
+        padding: 6px 12px;
+        font-weight: 500;
+    }
+
+    /* Recommendation box güzelleştirme */
+    .recommendation-box {
+        background: linear-gradient(135deg, #8A9DA6 0%, #00244A 100%);
+        border: none;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Not görüntüleme güzelleştirme */
+    .position-relative {
+        transition: all 0.3s ease;
+    }
+
+    .position-relative:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
     .nav-pills .nav-link.active {
-        background: linear-gradient(45deg, #48cae4, #023e8a);
+        background: linear-gradient(45deg, #00244A, #8A9DA6);
+        color: white !important;
     }
     .card-custom {
         border: none;
@@ -17,8 +121,9 @@
     .badge-onem-dusuk { background: linear-gradient(45deg, #6dc57b, #087f28); }
     .badge-onem-orta { background: linear-gradient(45deg, #ffd57b, #ffba43); }
     .badge-onem-yuksek { background: linear-gradient(45deg, #ff6565, #8b1d11); }
+    /*TODO:*/
     .recommendation-box {
-        background: linear-gradient(135deg, #48cae4 0%, #023e8a 100%);
+        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
         color: white;
         padding: 20px;
         border-radius: 15px;
@@ -29,7 +134,9 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">🦷 Ağız ve Diş Sağlığı Takibi</h2>
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold m2" style="color: #00244A;">🦷 Ağız ve Diş Sağlığı Takibi</h1>
+            </div>
             
             @if (TempData["BasariMesaji"] != null)
             {
@@ -48,13 +155,13 @@
             }
 
             <!-- Rastgele Öneri -->
-            <div class="recommendation-box">
+            <div class="recommendation-box text-center">
                 <h5 class="fw-bold mb-3">💡 Günün Önerisi</h5>
                 <p class="mb-0">@ViewBag.RastgeleOneri</p>
             </div>
 
             <!-- Sekmeler -->
-            <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+            <ul class="nav nav-pills mb-4 justify-content-center" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="pills-durum-tab" data-bs-toggle="pill" data-bs-target="#pills-durum" type="button" role="tab">
                         📊 Durum
@@ -75,7 +182,7 @@
                         <!-- Sol Kolon: Son 7 Gün + Kayıt Formları -->
                         <div class="col-md-8">
                             <!-- Son 7 Gün Özeti -->
-                            <div class="card card-custom">
+                            <div class="card card-custom son7gun">
                                 <div class="card-header">
                                     <h5 class="mb-0">📅 Son 7 Gün Özeti</h5>
                                 </div>
@@ -110,7 +217,7 @@
                             <!-- Hedef Kayıt Formları -->
                             @if (Model.Any())
                             {
-                                <div class="card card-custom">
+                                <div class="card card-custom hedefform">
                                     <div class="card-header">
                                         <h5 class="mb-0">📝 Hedef Kayıt Formları</h5>
                                     </div>
@@ -154,17 +261,24 @@
 
                         <!-- Sağ Kolon: Not Ekleme -->
                         <div class="col-md-4">
-                            <div class="card card-custom">
+                            <div class="card card-custom notekle">
                                 <div class="card-header">
                                     <h5 class="mb-0">📝 Not Ekle</h5>
                                 </div>
                                 <div class="card-body">
-                                    <form asp-action="NotEkle" method="post">
+                                    <form asp-action="NotEkle" method="post" enctype="multipart/form-data">
                                         <div class="mb-3">
                                             <label class="form-label">Açıklama</label>
-                                            <textarea name="Aciklama" class="form-control" rows="4" placeholder="Bugünkü deneyiminizi yazın..." required></textarea>
+                                            <textarea name="Aciklama" class="form-control" rows="3" placeholder="Bugünkü deneyiminizi yazın..." required></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-success w-100">Not Ekle</button>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Görsel (İsteğe Bağlı)</label>
+                                            <input type="file" name="GorselDosya" class="form-control" accept=".jpg,.jpeg,.png,.gif" />
+                                            <div class="form-text">JPG, JPEG, PNG veya GIF formatında dosya yükleyebilirsiniz.</div>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-success w-100">📸 Not Ekle</button>
                                     </form>
                                 </div>
                             </div>
@@ -172,16 +286,35 @@
                             <!-- Son Notlar -->
                             @if (ViewBag.Notlar != null && ((List<AgizDisSagligiTakip.Core.Entities.Not>)ViewBag.Notlar).Any())
                             {
-                                <div class="card card-custom">
+                                <div class="card card-custom sonnotlar">
                                     <div class="card-header">
                                         <h5 class="mb-0">📋 Son Notlar</h5>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body"> 
                                         @foreach (var not in (List<AgizDisSagligiTakip.Core.Entities.Not>)ViewBag.Notlar)
                                         {
-                                            <div class="mb-2 p-2 bg-light rounded">
-                                                <small class="text-muted">@not.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</small>
-                                                <p class="mb-0">@not.Aciklama</p>
+                                            <div class="mb-3 p-3 bg-light rounded position-relative">
+                                                <!-- Silme Butonu -->
+                                                <form asp-action="NotSil" method="post" class="position-absolute top-0 end-0 m-2" style="display: inline;">
+                                                    <input type="hidden" name="id" value="@not.Id" />
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" 
+                                                            onclick="return confirm('Bu notu silmek istediğinizden emin misiniz?')"
+                                                            title="Notu Sil">
+                                                        🗑️
+                                                    </button>
+                                                </form>
+                                                
+                                                <small class="text-muted d-block mb-2">📅 @not.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")</small>
+                                                
+                                                @if (!string.IsNullOrEmpty(not.GorselYolu))
+                                                {
+                                                    <div class="mb-2">
+                                                        <img src="@not.GorselYolu" alt="Not görseli" class="img-fluid rounded" style="max-height: 150px; cursor: pointer;" 
+                                                            onclick="window.open('@not.GorselYolu', '_blank')" />
+                                                    </div>
+                                                }
+                                                
+                                                <p class="mb-0 pe-4">@not.Aciklama</p>
                                             </div>
                                         }
                                     </div>

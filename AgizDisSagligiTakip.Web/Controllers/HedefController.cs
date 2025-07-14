@@ -167,10 +167,10 @@ namespace AgizDisSagligiTakip.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: Hedef/NotEkle
+        // POST: Hedef/NotEkle TODO:
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult NotEkle(NotViewModel model)
+        public IActionResult NotEkle(string Aciklama, IFormFile? GorselDosya)
         {
             var kullaniciId = HttpContext.Session.GetInt32("KullaniciId");
             if (kullaniciId == null)
@@ -178,24 +178,93 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 return RedirectToAction("Giris", "Kullanici");
             }
 
-            if (ModelState.IsValid)
+            if (string.IsNullOrEmpty(Aciklama))
             {
-                var yeniNot = new Not
+                TempData["HataMesaji"] = "Açıklama alanı zorunludur.";
+                return RedirectToAction("Index");
+            }
+
+            var yeniNot = new Not
+            {
+                Aciklama = Aciklama,
+                KullaniciId = kullaniciId.Value,
+                OlusturmaTarihi = DateTime.Now,
+                GorselYolu = ""
+            };
+
+            // Dosya upload 
+            if (GorselDosya != null && GorselDosya.Length > 0)
+            {
+                // Dosya türü kontrolü
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                var fileExtension = Path.GetExtension(GorselDosya.FileName).ToLower();
+                
+                if (allowedExtensions.Contains(fileExtension))
                 {
-                    Aciklama = model.Aciklama,
-                    KullaniciId = kullaniciId.Value,
-                    OlusturmaTarihi = DateTime.Now,
-                    GorselYolu = "" // Şimdilik boş TODO:
-                };
+                    // Klasör oluşturma
+                    var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "notlar");
+                    if (!Directory.Exists(uploadsPath))
+                    {
+                        Directory.CreateDirectory(uploadsPath);
+                    }
 
-                _context.Notlar.Add(yeniNot);
+                    // Dosya adı oluşturma
+                    var fileName = $"{Guid.NewGuid()}{fileExtension}";
+                    var filePath = Path.Combine(uploadsPath, fileName);
+
+                    // Dosyayı kaydetme
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        GorselDosya.CopyTo(stream);
+                    }
+
+                    yeniNot.GorselYolu = $"/uploads/notlar/{fileName}";
+                }
+                else
+                {
+                    TempData["HataMesaji"] = "Sadece .jpg, .jpeg, .png, .gif dosyaları yükleyebilirsiniz.";
+                    return RedirectToAction("Index");
+                }
+            }
+
+            _context.Notlar.Add(yeniNot);
+            _context.SaveChanges();
+
+            TempData["BasariMesaji"] = "Not başarıyla eklendi!";
+            return RedirectToAction("Index");
+        }
+
+        // POST: Hedef/NotSil TODO:
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NotSil(int id)
+        {
+            var kullaniciId = HttpContext.Session.GetInt32("KullaniciId");
+            if (kullaniciId == null)
+            {
+                return RedirectToAction("Giris", "Kullanici");
+            }
+
+            var not = _context.Notlar.FirstOrDefault(n => n.Id == id && n.KullaniciId == kullaniciId);
+            if (not != null)
+            {
+                // Dosya varsa sil
+                if (!string.IsNullOrEmpty(not.GorselYolu))
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", not.GorselYolu.TrimStart('/'));
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+
+                _context.Notlar.Remove(not);
                 _context.SaveChanges();
-
-                TempData["BasariMesaji"] = "Not başarıyla eklendi!";
+                TempData["BasariMesaji"] = "Not başarıyla silindi!";
             }
             else
             {
-                TempData["HataMesaji"] = "Not eklenirken hata oluştu.";
+                TempData["HataMesaji"] = "Not bulunamadı veya silme yetkiniz yok.";
             }
 
             return RedirectToAction("Index");
