@@ -8,6 +8,19 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AgizDisSagligiTakip.Web.styles.css" asp-append-version="true" />
     <style>
+        /* Tüm sayfalarda arka plan rengi */
+        body {
+            background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%) !important;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container'lar şeffaf olsun */
+        .container, .container-fluid {
+            background: transparent;
+        }
+
         /* Sticky Footer CSS */
         html, body {
             height: 100%;
@@ -51,7 +64,7 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link text-white px-3" asp-controller="Home" asp-action="Index">
-                                🏠 Ana Sayfa
+                                Ana Sayfa
                             </a>
                         </li>
                         @if (Context.Session.GetInt32("KullaniciId") != null)
@@ -108,25 +121,11 @@
         </div>
     </main>
 
-    <footer class="py-4 text-white" style="background: linear-gradient(90deg,rgba(0, 36, 74, 1) 0%,
+    <footer class="py-4 text-center text-white" style="background: linear-gradient(90deg,rgba(0, 36, 74, 1) 0%,
      rgba(159, 179, 196, 1) 50%, rgba(0, 36, 74, 1) 100%);">
         <div class="container">
-            <div class="row">
-                <!-- Sol taraf -->
-                <div class="col-md-6">
-                    <h5 class="fw-bold">🦷 Ağız ve Diş Sağlığı Takip</h5>
-                    <p class="mb-0">Sağlıklı gülüşler için en iyi takip uygulaması.</p>
-                </div>
-                <!-- Sağ taraf -->
-                <div class="col-md-6 text-md-end">
-                    <div class="mb-2">
-                        <a href="#" class="text-white text-decoration-none me-3">Hakkımızda</a>
-                        <a asp-controller="Home" asp-action="Privacy" class="text-white text-decoration-none me-3">Gizlilik</a>
-                        <a href="#" class="text-white text-decoration-none">İletişim</a>
-                    </div>
-                    <small class="text-light">© 2025 - AgizDisSagligiTakip.Web</small>
-                </div>
-            </div>
+            <h5 class="fw-bold">🦷 Ağız ve Diş Sağlığı Takip</h5>
+            <small class="text-light">© 2025 - AgizDisSagligiTakip.Web</small>
         </div>
     </footer>
 

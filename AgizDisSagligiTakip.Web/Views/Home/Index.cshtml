@@ -123,23 +123,20 @@
                 <div class="card card-custom no-hover h-100" style="background: linear-gradient(90deg,rgba(0, 36, 74, 1) 0%,
                  rgba(159, 179, 196, 1) 50%, rgba(0, 36, 74, 1) 100%);">
                     <div class="card-body text-center">
-                        <div class="icon-box icon-health">
-                            🦷
-                        </div>
-                        <h5 class="card-title fw-bold">Diş Sağlığı Takibi</h5>
-                        <p class="card-text">Hedeflerinizi belirleyin ve günlük takibinizi yapın.</p>
+                        <h5 class="card-title display-3 fw-bold text-light">Diş Sağlığı Takibi</h5>
+                        <p class="card-text text-light">Hedeflerinizi belirleyin ve günlük takibinizi yapın.</p>
                         <a asp-controller="Hedef" asp-action="Index" class="btn btn-outline-light btn-custom btn-lg">Diş Sağlığı Takibi</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-4">
+        <div class="row" style="margin-top: -8px;">
             <!-- Rastgele Öneri -->
             <div class="col-md-6">
                 <div class="recommendation-box">
                     <h5 class="fw-bold mb-3 text-light">💡 Günün Önerisi</h5>
-                    <p class="mb-0">@ViewBag.RastgeleOneri</p>
+                    <p class="mb-0 text-light">@ViewBag.RastgeleOneri</p>
                 </div>
             </div>
             <!-- Son 7 Gün İstatistikleri -->

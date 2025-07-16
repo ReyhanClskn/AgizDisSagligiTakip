@@ -4,54 +4,157 @@
     ViewData["Title"] = "Kullanıcı Girişi";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Kullanıcı Girişi</h3>
-                </div>
-                <div class="card-body">
-                    @if (TempData["BasariMesaji"] != null)
-                    {
-                        <div class="alert alert-success">
-                            @TempData["BasariMesaji"]
-                        </div>
-                    }
+<style>
+    body {
+        background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%) !important;
+        min-height: 100vh;
+    }
 
-                    @if (!ViewData.ModelState.IsValid)
-                    {
-                        <div class="alert alert-danger">
-                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                            {
-                                <div>@error.ErrorMessage</div>
-                            }
-                        </div>
-                    }
+    .login-container {S
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        background: transparent; /* Şeffaf yap */
+        padding: 20px 0;
+    }
 
-                    <form method="post" action="/Kullanici/Giris">
-                        @Html.AntiForgeryToken()
-                        
-                        <div class="mb-3">
-                            <label for="Email" class="form-label">E-posta</label>
-                            <input id="Email" name="Email" class="form-control" type="email" required />
-                        </div>
+    .login-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 
+            0 15px 35px rgba(0, 36, 74, 0.15),
+            0 5px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transform: perspective(1000px) rotateX(0deg);
+        transition: all 0.3s ease;
+        border: none;
+    }
 
-                        <div class="mb-3">
-                            <label for="Sifre" class="form-label">Şifre</label>
-                            <input id="Sifre" name="Sifre" class="form-control" type="password" required />
-                        </div>
+    .login-header {
+        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        border: none;
+    }
 
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Giriş Yap</button>
-                        </div>
+    .login-header h3 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.8rem;
+    }
 
-                        <div class="text-center mt-3">
-                            <a href="/Kullanici/Kayit" class="btn btn-link">Hesabınız yok mu? Kayıt olun</a>
-                            <br>
-                            <a href="/Kullanici/ParolaHatirlat" class="btn btn-link">Şifremi Unuttum</a>
-                        </div>
-                    </form>
+    .login-body {
+        padding: 40px;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        border: 2px solid #e9ecef;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .form-control:focus {
+        border-color: #00244A;
+        box-shadow: 0 0 0 0.2rem rgba(0, 36, 74, 0.15);
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 14px 30px;
+        color: white;
+        font-weight: 500;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 15px rgba(0, 36, 74, 0.3);
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 36, 74, 0.4);
+        color: white;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+
+    .btn-link {
+        color: #00244A;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .btn-link:hover {
+        color: #8A9DA6;
+    }
+
+    .alert {
+        border-radius: 12px;
+        border: none;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card login-card">
+                    <div class="card-header login-header">
+                        <h3>Kullanıcı Girişi</h3>
+                    </div>
+                    <div class="card-body login-body">
+                        @if (TempData["BasariMesaji"] != null)
+                        {
+                            <div class="alert alert-success">
+                                @TempData["BasariMesaji"]
+                            </div>
+                        }
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger">
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <div>@error.ErrorMessage</div>
+                                }
+                            </div>
+                        }
+
+                        <form method="post" action="/Kullanici/Giris">
+                            @Html.AntiForgeryToken()
+
+                            <div class="mb-4">
+                                <label for="Email" class="form-label">E-posta</label>
+                                <input id="Email" name="Email" class="form-control" type="email" 
+                                    placeholder="ornek@email.com" required />
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="Sifre" class="form-label">Şifre</label>
+                                <input id="Sifre" name="Sifre" class="form-control" type="password" 
+                                    placeholder="Şifrenizi girin" required />
+                            </div>
+
+                            <div class="d-grid mb-4">
+                                <button type="submit" class="btn btn-login">Giriş Yap</button>
+                            </div>
+
+                            <div class="text-center">
+                                <a href="/Kullanici/Kayit" class="btn btn-link">Hesabınız yok mu? Kayıt olun</a>
+                                <br>
+                                <a href="/Kullanici/ParolaHatirlat" class="btn btn-link">Şifremi Unuttum</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
