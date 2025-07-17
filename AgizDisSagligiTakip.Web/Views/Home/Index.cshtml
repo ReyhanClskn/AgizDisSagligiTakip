@@ -148,7 +148,12 @@
                         @foreach (dynamic kayit in ViewBag.Son7GunKayitlari)
                         {
                             <div class="mb-1 text-light small">
-                                • @kayit.HedefBaslik - @kayit.Tarih @kayit.Saat @kayit.Uygulandi
+                                • @kayit.HedefBaslik - @kayit.Tarih @kayit.Saat 
+                                @if (!string.IsNullOrEmpty(kayit.Sure))
+                                {
+                                    <span>(@kayit.Sure)</span>
+                                }
+                                @kayit.Uygulandi
                             </div>
                         }
                     }

@@ -39,6 +39,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 .Where(hk => hk.Hedef.KullaniciId == kullaniciId && hk.Tarih >= son7Gun)
                 .OrderByDescending(hk => hk.Tarih)
                 .ThenByDescending(hk => hk.Saat)
+                .Take(10)
                 .ToList();
 
             // Kullanıcının notları
@@ -110,10 +111,16 @@ namespace AgizDisSagligiTakip.Web.Controllers
 
             if (hedef != null)
             {
-                // Hedef kayıtları varsa kullanıcı onayı kontrolü TODO: frontend
+                // Hedefin kayıtları varsa tüm kayıtları da sil
+                if (hedef.HedefKayitlari.Any())
+                {
+                    _context.HedefKayitlari.RemoveRange(hedef.HedefKayitlari);
+                }
+
                 _context.Hedefler.Remove(hedef);
                 _context.SaveChanges();
-                TempData["BasariMesaji"] = "Hedef başarıyla silindi!";
+                
+                TempData["BasariMesaji"] = "Hedef ve ilgili tüm kayıtlar başarıyla silindi!";
             }
             else
             {
@@ -191,7 +198,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 OlusturmaTarihi = DateTime.Now,
                 GorselYolu = ""
             };
-
+            
             // Dosya upload 
             if (GorselDosya != null && GorselDosya.Length > 0)
             {
@@ -268,6 +275,21 @@ namespace AgizDisSagligiTakip.Web.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        // GET: Hedef/HedefKayitKontrol TODO:
+        public JsonResult HedefKayitKontrol(int id)
+        {
+            var kullaniciId = HttpContext.Session.GetInt32("KullaniciId");
+            if (kullaniciId == null)
+            {
+                return Json(new { kayitSayisi = 0 });
+            }
+
+            var kayitSayisi = _context.HedefKayitlari
+                .Count(hk => hk.HedefId == id && hk.Hedef.KullaniciId == kullaniciId);
+
+            return Json(new { kayitSayisi = kayitSayisi });
         }
 
         private string GetRastgeleOneri()

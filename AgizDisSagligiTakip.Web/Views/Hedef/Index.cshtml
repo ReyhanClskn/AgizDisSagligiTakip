@@ -155,7 +155,7 @@
             }
 
             <!-- Rastgele Öneri -->
-            <div class="recommendation-box text-center d-flex flex-column justify-content-center align-items-center">
+            <div class="recommendation-box text-center">
                 <h5 class="fw-bold mb-3">💡 Günün Önerisi</h5>
                 <p class="mb-0">@ViewBag.RastgeleOneri</p>
             </div>
@@ -194,6 +194,10 @@
                                             <div class="mb-2 p-2 bg-light rounded">
                                                 <strong>@kayit.Hedef.Baslik</strong> - 
                                                 @kayit.Tarih.ToString("dd.MM.yyyy") @kayit.Saat.ToString(@"hh\:mm")
+                                                @if (kayit.Sure.HasValue)
+                                                {
+                                                    <span class="text-muted">(@kayit.Sure dk)</span>
+                                                }
                                                 @if (kayit.Uygulandi)
                                                 {
                                                     <span class="badge" style="background: linear-gradient(45deg, 
@@ -358,7 +362,7 @@
                                                     <form asp-action="HedefSil" method="post" style="display: inline;">
                                                         <input type="hidden" name="id" value="@hedef.Id" />
                                                         <button type="submit" class="btn btn-outline-danger btn-sm" 
-                                                                onclick="return confirm('Bu hedefi silmek istediğinizden emin misiniz?')">
+                                                                onclick="return hedefSilOnay(@hedef.Id, '@hedef.Baslik')">
                                                             🗑 Sil
                                                         </button>
                                                     </form>
@@ -432,4 +436,34 @@
             tabTrigger.show()
         })
     })
+</script>
+
+<script>
+function hedefSilOnay(hedefId, hedefBaslik) {
+    // AJAX ile hedefin kayıt durumunu kontrol et
+    fetch('/Hedef/HedefKayitKontrol?id=' + hedefId)
+        .then(response => response.json())
+        .then(data => {
+            let mesaj = '';
+            if (data.kayitSayisi > 0) {
+                mesaj = `"${hedefBaslik}" hedefi için ${data.kayitSayisi} adet kayıt bulunuyor.\n\n` +
+                        `Hedefi sildiğinizde tüm kayıtlar da silinecek!\n\n` +
+                        `Silmek istediğinizden emin misiniz?`;
+            } else {
+                mesaj = `"${hedefBaslik}" hedefini silmek istediğinizden emin misiniz?`;
+            }
+            
+            if (confirm(mesaj)) {
+                document.querySelector(`form input[value="${hedefId}"]`).closest('form').submit();
+            }
+        })
+        .catch(error => {
+            console.error('Hata:', error);
+            if (confirm(`"${hedefBaslik}" hedefini silmek istediğinizden emin misiniz?`)) {
+                document.querySelector(`form input[value="${hedefId}"]`).closest('form').submit();
+            }
+        });
+    
+    return false; // Form otomatik submit olmasın
+}
 </script>

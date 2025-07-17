@@ -43,6 +43,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
                         HedefBaslik = hk.Hedef.Baslik,
                         Tarih = hk.Tarih.ToString("dd.MM.yyyy"),
                         Saat = hk.Saat.ToString(@"hh\:mm"),
+                        Sure = hk.Sure.HasValue ? hk.Sure.Value + " dk" : "",
                         Uygulandi = hk.Uygulandi ? "✓" : "✗"
                     })
                     .ToList();
