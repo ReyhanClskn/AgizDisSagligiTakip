@@ -5,13 +5,10 @@ namespace AgizDisSagligiTakip.Core.Helpers
 {
     public class EmailService
     {
-        private readonly string _smtpServer = "smtp.mailtrap.io";
-        private readonly int _smtpPort = 2525;
-        private readonly string _fromEmail = "noreply@agizdistakip.com";
-
-        //TODO: Burdan Mailtrap username password değiştir
-        private readonly string _username = "0f7*******"; // Mailtrap
-        private readonly string _password = "4294*******"; // Mailtrap
+        private readonly string _smtpServer = "smtp.gmail.com";
+        private readonly int _smtpPort = 587;
+        private readonly string _fromEmail = "*************@gmail.com"; 
+        private readonly string _fromPassword = "*********"; //app password TODO: delete before commit
 
         public async Task<bool> KayitMailiGonderAsync(string toEmail, string kullaniciAdi)
         {
@@ -22,7 +19,7 @@ namespace AgizDisSagligiTakip.Core.Helpers
 
                 using var smtpClient = new SmtpClient(_smtpServer, _smtpPort);
                 smtpClient.EnableSsl = true;
-                smtpClient.Credentials = new NetworkCredential(_username, _password);
+                smtpClient.Credentials = new NetworkCredential(_fromEmail, _fromPassword);
 
                 using var message = new MailMessage();
                 message.From = new MailAddress(_fromEmail, "Ağız ve Diş Sağlığı Takip");
