@@ -1,0 +1,195 @@
+@model AgizDisSagligiTakip.Core.ViewModels.EmailDogrulamaViewModel
+
+@{
+    ViewData["Title"] = "Email Doğrulama";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%) !important;
+        min-height: 100vh;
+    }
+
+    .verification-container {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        background: transparent;
+        padding: 20px 0;
+    }
+
+    .verification-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 
+            0 15px 35px rgba(0, 36, 74, 0.15),
+            0 5px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transform: perspective(1000px) rotateX(0deg);
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .verification-header {
+        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        border: none;
+    }
+
+    .verification-header h3 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.8rem;
+    }
+
+    .verification-body {
+        padding: 40px;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        border: 2px solid #e9ecef;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .form-control:focus {
+        border-color: #00244A;
+        box-shadow: 0 0 0 0.2rem rgba(0, 36, 74, 0.15);
+    }
+
+    .btn-verify {
+        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 14px 30px;
+        color: white;
+        font-weight: 500;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 15px rgba(0, 36, 74, 0.3);
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .btn-verify:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 36, 74, 0.4);
+        color: white;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+        font-size: 0.875rem;
+        margin-top: 5px;
+    }
+
+    .info-box {
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 25px;
+        border-left: 4px solid #00244A;
+    }
+
+    .info-box h5 {
+        color: #00244A;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .info-box p {
+        margin-bottom: 5px;
+        color: #6c757d;
+    }
+
+    .code-input {
+        font-size: 24px;
+        text-align: center;
+        letter-spacing: 8px;
+        font-weight: 600;
+    }
+
+    .timer-info {
+        color: #dc3545;
+        font-size: 14px;
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="verification-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card verification-card">
+                    <div class="card-header verification-header">
+                        <h3>Email Doğrulama</h3>
+                        <p class="mb-0 mt-2">Kayıt işlemini tamamlamak için email adresinizi doğrulayın</p>
+                    </div>
+                    <div class="card-body verification-body">
+                        @if (TempData["BasariMesaji"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @TempData["BasariMesaji"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        <div class="info-box">
+                            <h5>Doğrulama Kodu Gönderildi</h5>
+                            <p><strong>@Model.Email</strong> adresine 6 haneli doğrulama kodu gönderildi.</p>
+                            <p class="mb-0">Lütfen email kutunuzu kontrol edin ve kodu aşağıya girin.</p>
+                        </div>
+
+                        <form asp-action="EmailDogrula" method="post">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                            <input type="hidden" asp-for="Email" />
+
+                            <div class="mb-4">
+                                <label asp-for="DogrulamaKodu" class="form-label">Doğrulama Kodu</label>
+                                <input asp-for="DogrulamaKodu" 
+                                       class="form-control code-input" 
+                                       placeholder="000000" 
+                                       maxlength="6" 
+                                       autocomplete="off" />
+                                <span asp-validation-for="DogrulamaKodu" class="text-danger"></span>
+                                <div class="timer-info">
+                                    Kodun geçerlilik süresi: 10 dakika
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-verify">Doğrula ve Kaydı Tamamla</button>
+                            </div>
+                        </form>
+
+                        <div class="text-center mt-4">
+                            <p class="text-muted">
+                                Kod gelmedi mi? 
+                                <a asp-action="Kayit" class="text-decoration-none">Tekrar kayıt ol</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Sadece rakam girişine izin ver
+        document.querySelector('.code-input').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+}

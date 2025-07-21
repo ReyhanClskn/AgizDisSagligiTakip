@@ -111,6 +111,20 @@
                 <div class="card login-card">
                     <div class="card-header login-header">
                         <h3>Parola Hatırlatma</h3>
+                        <p class="mb-0 mt-2">
+                            @if (!Model?.DogrulamaKoduGonderildi == true)
+                            {
+                                <span>E-posta adresinizi girin, doğrulama kodu gönderelim</span>
+                            }
+                            else if (!Model?.EmailDogrulandi == true)
+                            {
+                                <span>Doğrulama kodunu girin ve yeni şifrenizi belirleyin</span>
+                            }
+                            else
+                            {
+                                <span>Yeni şifrenizi belirleyin</span>
+                            }
+                        </p>
                     </div>
                     <div class="card-body login-body">
                         @if (TempData["BasariMesaji"] != null)
@@ -132,28 +146,38 @@
 
                         <form method="post" action="/Kullanici/ParolaHatirlat">
                             @Html.AntiForgeryToken()
-                            
-                            @if (Model?.EmailDogrulandi == true)
-                            {
-                                <input type="hidden" name="EmailDogrulandi" value="true" />
-                            }
-                            else
-                            {
-                                <input type="hidden" name="EmailDogrulandi" value="false" />
-                            }
 
-                            <div class="mb-4">
-                                <label for="Email" class="form-label">E-posta</label>
-                                <input id="Email" name="Email" class="form-control" type="email" 
-                                       value="@(Model?.Email ?? "")" 
-                                       placeholder="ornek@email.com"
-                                       @(Model?.EmailDogrulandi == true ? "readonly" : "") required />
-                            </div>
+                            <input type="hidden" name="EmailDogrulandi" value="@Model?.EmailDogrulandi.ToString().ToLower()" />
+                            <input type="hidden" name="DogrulamaKoduGonderildi" value="@Model?.DogrulamaKoduGonderildi.ToString().ToLower()" />
 
-                            @if (Model?.EmailDogrulandi == true)
+                            @if (!Model?.DogrulamaKoduGonderildi == true)
                             {
-                                <div class="alert alert-success">
-                                    ✅ E-posta adresiniz doğrulandı. Şimdi yeni şifrenizi belirleyebilirsiniz.
+                                <!-- 1. Adım: Email gir -->
+                                <div class="mb-4">
+                                    <label for="Email" class="form-label">E-posta</label>
+                                    <input id="Email" name="Email" class="form-control" type="email" 
+                                           value="@(Model?.Email ?? "")" 
+                                           placeholder="ornek@email.com" required />
+                                </div>
+
+                                <div class="d-grid mb-4">
+                                    <button type="submit" class="btn btn-login">Doğrulama Kodu Gönder</button>
+                                </div>
+                            }
+                            else if (!Model?.EmailDogrulandi == true)
+                            {
+                                <!-- 2. Adım: Doğrulama kodu + Yeni şifre -->
+                                <input type="hidden" name="Email" value="@Model.Email" />
+                                
+                                <div class="alert alert-info">
+                                    ✅ <strong>@Model.Email</strong> adresine doğrulama kodu gönderildi.
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="DogrulamaKodu" class="form-label">Doğrulama Kodu</label>
+                                    <input id="DogrulamaKodu" name="DogrulamaKodu" class="form-control" type="text" 
+                                           placeholder="6 haneli kod" maxlength="6" required />
+                                    <div class="form-text">Email adresinize gönderilen 6 haneli kodu girin</div>
                                 </div>
 
                                 <div class="mb-4">
@@ -171,12 +195,6 @@
 
                                 <div class="d-grid mb-4">
                                     <button type="submit" class="btn btn-success-custom">Şifreyi Güncelle</button>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="d-grid mb-4">
-                                    <button type="submit" class="btn btn-login">E-posta Adresini Doğrula</button>
                                 </div>
                             }
 

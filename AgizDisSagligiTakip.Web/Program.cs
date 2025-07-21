@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Session için gerekli cache servisi
+builder.Services.AddDistributedMemoryCache();
+
 // Session yapılandırması TODO:
 builder.Services.AddSession(options =>
 {

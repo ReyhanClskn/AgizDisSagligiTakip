@@ -19,5 +19,12 @@ namespace AgizDisSagligiTakip.Core.ViewModels
         public string? YeniSifreTekrar { get; set; }
 
         public bool EmailDogrulandi { get; set; } = false;
+
+        // Email doğrulama için     
+        [StringLength(6, MinimumLength = 6, ErrorMessage = "Doğrulama kodu 6 haneli olmalıdır.")]
+        [Display(Name = "Doğrulama Kodu")]
+        public string? DogrulamaKodu { get; set; }
+
+        public bool DogrulamaKoduGonderildi { get; set; } = false;
     }
 }
