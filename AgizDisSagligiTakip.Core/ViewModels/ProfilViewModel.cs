@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace AgizDisSagligiTakip.Core.ViewModels
 {
@@ -16,22 +17,11 @@ namespace AgizDisSagligiTakip.Core.ViewModels
         [Display(Name = "Soyad")]
         public string Soyad { get; set; }
 
-    //TODO:
         [Required(ErrorMessage = "E-posta alanı zorunludur.")]
         [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz.")]
-        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "E-posta adresi geçerli bir domain ile bitmelidir (örn: .com, .net, .org)")]
         [StringLength(150, ErrorMessage = "E-posta en fazla 150 karakter olabilir.")]
         [Display(Name = "E-posta")]
         public string Email { get; set; }
-
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "Şifre en az 8 karakter olmalıdır.")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$", ErrorMessage = "Şifre en az bir büyük harf, bir küçük harf ve bir rakam içermelidir.")]
-        [Display(Name = "Yeni Şifre (Boş bırakılırsa değişmez)")]
-        public string YeniSifre { get; set; } = "";
-
-        [Compare("YeniSifre", ErrorMessage = "Şifreler eşleşmiyor.")]
-        [Display(Name = "Yeni Şifre Tekrar")]
-        public string YeniSifreTekrar { get; set; } = "";
 
         [Required(ErrorMessage = "Doğum tarihi alanı zorunludur.")]
         [Display(Name = "Doğum Tarihi")]
@@ -39,5 +29,26 @@ namespace AgizDisSagligiTakip.Core.ViewModels
 
         [Display(Name = "Kayıt Tarihi")]
         public DateTime KayitTarihi { get; set; }
+
+        [Display(Name = "Yeni Şifre")]
+        [StringLength(100, MinimumLength = 8, ErrorMessage = "Şifre en az 8 karakter olmalıdır.")]
+        public string? YeniSifre { get; set; }
+
+        [Display(Name = "Yeni Şifre Tekrar")]
+        [Compare("YeniSifre", ErrorMessage = "Şifreler eşleşmiyor.")]
+        public string? YeniSifreTekrar { get; set; }
+
+        // Hesap silme için şifre doğrulama
+        [Display(Name = "Mevcut Şifre")]
+        [DataType(DataType.Password)]
+        public string? MevcutSifre { get; set; }
+
+        // Profil fotoğrafı
+        [Display(Name = "Profil Fotoğrafı")]
+        public string? ProfilFotoUrl { get; set; }
+
+        // Yeni profil fotoğrafı yükleme
+        [Display(Name = "Yeni Profil Fotoğrafı")]
+        public IFormFile? ProfilFoto { get; set; }
     }
 }

@@ -66,6 +66,34 @@ namespace AgizDisSagligiTakip.Core.Helpers
             }
         }
 
+        public async Task<bool> HesapSilmeOnayMailiGonderAsync(string toEmail, string kullaniciAdi)
+        {
+            try
+            {
+                var subject = "😢 Ağız ve Diş Sağlığı Takip - Hesabınız Silindi";
+                var htmlBody = HesapSilmeOnayMailiHtmlOlustur(kullaniciAdi);
+
+                using var smtpClient = new SmtpClient(_smtpServer, _smtpPort);
+                smtpClient.EnableSsl = true;
+                smtpClient.Credentials = new NetworkCredential(_fromEmail, _fromPassword);
+
+                using var message = new MailMessage();
+                message.From = new MailAddress(_fromEmail, "Ağız ve Diş Sağlığı Takip");
+                message.To.Add(toEmail);
+                message.Subject = subject;
+                message.Body = htmlBody;
+                message.IsBodyHtml = true;
+
+                await smtpClient.SendMailAsync(message);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Hesap silme onay email gönderme hatası: {ex.Message}");
+                return false;
+            }
+        }
+
         private string KayitMailiHtmlOlustur(string kullaniciAdi)
         {
             return $@"
@@ -164,6 +192,60 @@ namespace AgizDisSagligiTakip.Core.Helpers
             </div>
             
             <p>Bu işlemi siz yapmadıysanız, bu mesajı görmezden gelebilirsiniz.</p>
+        </div>
+        <div class='footer'>
+            <p>Bu mail otomatik olarak gönderilmiştir.</p>
+            <p>© 2025 - Ağız ve Diş Sağlığı Takip</p>
+        </div>
+    </div>
+</body>
+</html>";
+        }
+
+        private string HesapSilmeOnayMailiHtmlOlustur(string kullaniciAdi)
+        {
+            return $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Hesabınız Silindi</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f5f5f5; }}
+        .container {{ max-width: 600px; margin: 0 auto; background-color: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}
+        .header {{ background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px 20px; text-align: center; }}
+        .content {{ padding: 30px 20px; text-align: center; }}
+        .footer {{ text-align: center; padding: 20px; font-size: 12px; color: #666; background-color: #f8f9fa; }}
+        .emoji {{ font-size: 48px; margin-bottom: 20px; }}
+        .message-box {{ background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; }}
+        .farewell {{ font-style: italic; color: #6c757d; margin-top: 20px; }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>Hesabınız Silindi</h1>
+            <p>Gittiğinizi görmek bizi üzdü.. </p>
+        </div>
+        <div class='content'>
+            <div class='emoji'>👋</div>
+            
+            <h2>Hoşça kalın {kullaniciAdi},</h2>
+            
+            <div class='message-box'>
+                <p>Ağız ve Diş Sağlığı Takip uygulamasından ayrıldığınız için üzgünüz.</p>
+                <p><strong>Hesabınız ve tüm verileriniz kalıcı olarak silinmiştir.</strong></p>
+            </div>
+            
+            <p>Sizinle geçirdiğimiz zaman için teşekkür ederiz.</p>
+            
+            <p>Eğer fikirlerinizi değiştirirseniz, kapımız her zaman açık! 
+            Tekrar kayıt olabilir ve sağlıklı alışkanlıklarınızı takip etmeye devam edebilirsiniz.</p>
+            
+            <div class='farewell'>
+                <p>Sağlıklı gülüşler ve mutlu günler dileriz! 🌟</p>
+                <p><strong>- Ağız ve Diş Sağlığı Takip Ekibi</strong></p>
+            </div>
         </div>
         <div class='footer'>
             <p>Bu mail otomatik olarak gönderilmiştir.</p>

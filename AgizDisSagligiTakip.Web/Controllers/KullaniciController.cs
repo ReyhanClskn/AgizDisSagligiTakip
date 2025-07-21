@@ -213,6 +213,10 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 HttpContext.Session.SetInt32("KullaniciId", kullanici.Id);
                 HttpContext.Session.SetString("KullaniciAd", kullanici.Ad);
                 HttpContext.Session.SetString("KullaniciSoyad", kullanici.Soyad);
+                if (!string.IsNullOrEmpty(kullanici.ProfilFotoUrl))
+                {
+                    HttpContext.Session.SetString("KullaniciProfilFoto", kullanici.ProfilFotoUrl);
+                }
 
                 return RedirectToAction("Index", "Home");
             }
@@ -253,7 +257,8 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 Soyad = kullanici.Soyad,
                 Email = kullanici.Email,
                 DogumTarihi = kullanici.DogumTarihi,
-                KayitTarihi = kullanici.KayitTarihi
+                KayitTarihi = kullanici.KayitTarihi,
+                ProfilFotoUrl = kullanici.ProfilFotoUrl
             };
 
             return View(model);
@@ -262,7 +267,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
         // POST: Kullanici/Profil
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Profil(ProfilViewModel model)
+        public async Task<IActionResult> Profil(ProfilViewModel model, string croppedImageData)
         {
             var kullaniciId = HttpContext.Session.GetInt32("KullaniciId");
             if (kullaniciId == null)
@@ -285,7 +290,67 @@ namespace AgizDisSagligiTakip.Web.Controllers
                     if (mevcutEmail != null)
                     {
                         ModelState.AddModelError("Email", "Bu e-posta adresi başka bir kullanıcı tarafından kullanılmaktadır.");
+                        model.ProfilFotoUrl = kullanici.ProfilFotoUrl;
                         return View(model);
+                    }
+                }
+
+                // Profil fotoğrafı işlemleri
+                if (!string.IsNullOrEmpty(croppedImageData))
+                {
+                    if (croppedImageData == "REMOVE")
+                    {
+                        // Eski fotoğrafı sil
+                        if (!string.IsNullOrEmpty(kullanici.ProfilFotoUrl))
+                        {
+                            var eskiFotoPath = Path.Combine("wwwroot", kullanici.ProfilFotoUrl.TrimStart('/'));
+                            if (System.IO.File.Exists(eskiFotoPath))
+                            {
+                                System.IO.File.Delete(eskiFotoPath);
+                            }
+                        }
+                        kullanici.ProfilFotoUrl = null;
+                    }
+                    else if (croppedImageData.StartsWith("data:image"))
+                    {
+                        try
+                        {
+                            // Base64'ten byte array'e çevir
+                            var base64Data = croppedImageData.Split(',')[1];
+                            var imageBytes = Convert.FromBase64String(base64Data);
+
+                            // Dosya adı oluştur
+                            var fileName = $"{Guid.NewGuid()}.jpg";
+                            var uploadsFolder = Path.Combine("wwwroot", "uploads", "profil");
+                            
+                            // Klasör yoksa oluştur
+                            if (!Directory.Exists(uploadsFolder))
+                            {
+                                Directory.CreateDirectory(uploadsFolder);
+                            }
+
+                            var filePath = Path.Combine(uploadsFolder, fileName);
+
+                            // Eski fotoğrafı sil
+                            if (!string.IsNullOrEmpty(kullanici.ProfilFotoUrl))
+                            {
+                                var eskiFotoPath = Path.Combine("wwwroot", kullanici.ProfilFotoUrl.TrimStart('/'));
+                                if (System.IO.File.Exists(eskiFotoPath))
+                                {
+                                    System.IO.File.Delete(eskiFotoPath);
+                                }
+                            }
+
+                            // Yeni fotoğrafı kaydet
+                            await System.IO.File.WriteAllBytesAsync(filePath, imageBytes);
+                            kullanici.ProfilFotoUrl = $"/uploads/profil/{fileName}";
+                        }
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError("", "Fotoğraf yüklenirken bir hata oluştu.");
+                            model.ProfilFotoUrl = kullanici.ProfilFotoUrl;
+                            return View(model);
+                        }
                     }
                 }
 
@@ -306,6 +371,14 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 // Session'daki bilgileri güncelle
                 HttpContext.Session.SetString("KullaniciAd", kullanici.Ad);
                 HttpContext.Session.SetString("KullaniciSoyad", kullanici.Soyad);
+                if (!string.IsNullOrEmpty(kullanici.ProfilFotoUrl))
+                {
+                    HttpContext.Session.SetString("KullaniciProfilFoto", kullanici.ProfilFotoUrl);
+                }
+                else
+                {
+                    HttpContext.Session.Remove("KullaniciProfilFoto");
+                }
 
                 TempData["BasariMesaji"] = "Profil bilgileriniz başarıyla güncellendi!";
                 return RedirectToAction("Profil");
@@ -440,6 +513,81 @@ namespace AgizDisSagligiTakip.Web.Controllers
 
             ModelState.AddModelError("", "Bir hata oluştu. Lütfen tekrar deneyin.");
             return View(model);
+        }
+
+        // POST: Kullanici/HesapSil
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> HesapSil(string mevcutSifre)
+        {
+            var kullaniciId = HttpContext.Session.GetInt32("KullaniciId");
+            if (kullaniciId == null)
+            {
+                return Json(new { success = false, message = "Oturum süreniz dolmuş." });
+            }
+
+            if (string.IsNullOrEmpty(mevcutSifre))
+            {
+                return Json(new { success = false, message = "Şifre girilmesi zorunludur." });
+            }
+
+            var kullanici = _context.Kullanicilar.FirstOrDefault(k => k.Id == kullaniciId);
+            if (kullanici == null)
+            {
+                return Json(new { success = false, message = "Kullanıcı bulunamadı." });
+            }
+
+            // Şifre kontrolü
+            if (!SifreKontrolEt(mevcutSifre, kullanici.Sifre))
+            {
+                return Json(new { success = false, message = "Şifre hatalı." });
+            }
+
+            // Email ve ad bilgilerini sakla (mail göndermek için)
+            var kullaniciEmail = kullanici.Email;
+            var kullaniciAd = kullanici.Ad;
+
+            try
+            {
+                // Önce ilişkili verileri sil
+                // Hedef kayıtlarını sil
+                var hedefler = _context.Hedefler.Where(h => h.KullaniciId == kullaniciId).ToList();
+                foreach (var hedef in hedefler)
+                {
+                    var hedefKayitlari = _context.HedefKayitlari.Where(hk => hk.HedefId == hedef.Id).ToList();
+                    _context.HedefKayitlari.RemoveRange(hedefKayitlari);
+                }
+                _context.Hedefler.RemoveRange(hedefler);
+
+                // Notları sil
+                var notlar = _context.Notlar.Where(n => n.KullaniciId == kullaniciId).ToList();
+                _context.Notlar.RemoveRange(notlar);
+
+                // Son olarak kullanıcıyı sil
+                _context.Kullanicilar.Remove(kullanici);
+                
+                // Değişiklikleri kaydet
+                _context.SaveChanges();
+
+                // Hesap silme onay emaili gönder
+                try
+                {
+                    await _emailService.HesapSilmeOnayMailiGonderAsync(kullaniciEmail, kullaniciAd);
+                }
+                catch
+                {
+                    // Email gönderilemese bile hesap silinmiş durumda
+                }
+
+                // Session'ı temizle
+                HttpContext.Session.Clear();
+
+                return Json(new { success = true, message = "Hesabınız başarıyla silindi." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Hesap silinirken bir hata oluştu. Lütfen tekrar deneyin." });
+            }
         }
 
         // AES Şifreleme TODO: Kriptoloji notlarına bak

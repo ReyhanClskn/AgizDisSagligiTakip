@@ -39,6 +39,32 @@
         footer {
             flex-shrink: 0;
         }
+
+        /* Profil fotoğrafı stilleri */
+        .navbar-profile-photo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+
+        .navbar-profile-container {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .navbar-profile-initial {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -85,10 +111,20 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                                     <!-- Avatar -->
-                                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px;">
-                                        <span class="fw-bold text-dark small">
-                                            @(Context.Session.GetString("KullaniciAd")?.Substring(0, 1).ToUpper() ?? "U")
-                                        </span>
+                                    <div class="navbar-profile-container me-2">
+                                        @{
+                                            var profilFotoUrl = Context.Session.GetString("KullaniciProfilFoto");
+                                            if (!string.IsNullOrEmpty(profilFotoUrl))
+                                            {
+                                                <img src="@profilFotoUrl" alt="Profil" class="navbar-profile-photo">
+                                            }
+                                            else
+                                            {
+                                                <span class="navbar-profile-initial">
+                                                    @(Context.Session.GetString("KullaniciAd")?.Substring(0, 1).ToUpper() ?? "U")
+                                                </span>
+                                            }
+                                        }
                                     </div>
                                     @Context.Session.GetString("KullaniciAd")
                                 </a>

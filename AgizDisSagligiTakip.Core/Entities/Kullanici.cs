@@ -36,8 +36,13 @@ namespace AgizDisSagligiTakip.Core.Entities
         
         public bool EmailDogrulandi { get; set; } = false;
 
+         // Profil fotoğrafı
+        [StringLength(500)]
+        public string? ProfilFotoUrl { get; set; }        
+
         // TODO: Navigation Properties
         public virtual ICollection<Hedef> Hedefler { get; set; } = new List<Hedef>();
         public virtual ICollection<Not> Notlar { get; set; } = new List<Not>();
+        
     }
 }
