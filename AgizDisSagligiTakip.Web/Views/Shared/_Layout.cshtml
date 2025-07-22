@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="@System.Threading.Thread.CurrentThread.CurrentUICulture.Name">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AgizDisSagligiTakip.Web</title>
+    <title>@ViewData["Title"] - @SharedLocalizer["OralHealth"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AgizDisSagligiTakip.Web.styles.css" asp-append-version="true" />
@@ -65,6 +65,25 @@
             color: #333;
             font-size: 14px;
         }
+
+        /* Dil seçici stil */
+        .language-selector {
+            margin-left: 15px;
+        }
+
+        .language-selector select {
+            background-color: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .language-selector select option {
+            background-color: #333;
+            color: white;
+        }
     </style>
 </head>
 
@@ -76,7 +95,7 @@
             <div class="container-fluid">
                 <!-- Logo/Brand -->
                 <a class="navbar-brand fw-bold me-4" asp-controller="Home" asp-action="Index">
-                    🦷 Ağız ve Diş Sağlığı Takip
+                    🦷 @SharedLocalizer["OralHealth"]
                 </a>
                 
                 <!-- Mobile Toggle -->
@@ -90,21 +109,21 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link text-white px-3" asp-controller="Home" asp-action="Index">
-                                Ana Sayfa
+                                @SharedLocalizer["Home"]
                             </a>
                         </li>
                         @if (Context.Session.GetInt32("KullaniciId") != null)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white px-3" asp-controller="Hedef" asp-action="Index">
-                                    🦷 Sağlık Takibi
+                                    🦷 @SharedLocalizer["Goals"]
                                 </a>
                             </li>
                         }
                     </ul>
                     
                     <!-- Sağ Kullanıcı Menüsü -->
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-center">
                         @if (Context.Session.GetInt32("KullaniciId") != null)
                         {
                             <!-- Kullanıcı Dropdown -->
@@ -116,7 +135,7 @@
                                             var profilFotoUrl = Context.Session.GetString("KullaniciProfilFoto");
                                             if (!string.IsNullOrEmpty(profilFotoUrl))
                                             {
-                                                <img src="@profilFotoUrl" alt="Profil" class="navbar-profile-photo">
+                                                <img src="@profilFotoUrl" alt="@SharedLocalizer["Profile"]" class="navbar-profile-photo">
                                             }
                                             else
                                             {
@@ -131,21 +150,25 @@
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><h6 class="dropdown-header">@Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")</h6></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" asp-controller="Kullanici" asp-action="Profil">👤 Profil</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Kullanici" asp-action="Profil">👤 @SharedLocalizer["Profile"]</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" asp-controller="Kullanici" asp-action="Cikis">🚪 Çıkış</a></li>
+                                    <li><a class="dropdown-item text-danger" asp-controller="Kullanici" asp-action="Cikis">🚪 @SharedLocalizer["Logout"]</a></li>
                                 </ul>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-white px-3" asp-controller="Kullanici" asp-action="Giris">🔑 Giriş</a>
+                                <a class="nav-link text-white px-3" asp-controller="Kullanici" asp-action="Giris">🔑 @SharedLocalizer["Login"]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white px-3" asp-controller="Kullanici" asp-action="Kayit">📝 Kayıt</a>
+                                <a class="nav-link text-white px-3" asp-controller="Kullanici" asp-action="Kayit">📝 @SharedLocalizer["Register"]</a>
                             </li>
                         }
+                        <!-- Dil Seçici -->
+                        <li class="nav-item">
+                            @await Html.PartialAsync("_LanguagePartial")
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -160,8 +183,8 @@
     <footer class="py-4 text-center text-white" style="background: linear-gradient(90deg,rgba(0, 36, 74, 1) 0%,
      rgba(159, 179, 196, 1) 50%, rgba(0, 36, 74, 1) 100%);">
         <div class="container">
-            <h5 class="fw-bold">🦷 Ağız ve Diş Sağlığı Takip</h5>
-            <small class="text-light">© 2025 - AgizDisSagligiTakip.Web</small>
+            <h5 class="fw-bold">🦷 @SharedLocalizer["OralHealth"]</h5>
+            <small class="text-light">© 2025 - @SharedLocalizer["OralHealth"]</small>
         </div>
     </footer>
 
