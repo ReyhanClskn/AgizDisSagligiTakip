@@ -1,165 +1,414 @@
-﻿@{
+﻿@using AgizDisSagligiTakip.Core.Entities
+@{
     ViewData["Title"] = "Ana Sayfa";
 }
 
 <style>
+    /* Hero Section */
     .hero-section {
-        background: radial-gradient(circle,rgba(138, 157, 166, 1) 0%, rgba(0, 36, 74, 1) 100%);
-        color: white;
-        padding: 60px 0;
-        border-radius: 15px;
-        margin-bottom: 30px;
-        box-shadow: 0 -4px 15px rgba(0,0,0,0.08), 0 8px 25px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        margin: -2rem -12px 4rem;
+        padding: 6rem 12px 4rem 12px; /* Üst padding artırıldı */
+        margin-top: 20px; /* Header'dan boşluk */
     }
-    /* Hero section buton hover */
-    .btn-light:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15) !important;
-        transition: all 0.3s ease !important;
+    
+    /* Tooth Image Background */
+    .tooth-bg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+        opacity: 0.15;
+        z-index: 0;
+        animation: toothFloat 20s ease-in-out infinite;
     }
-    .btn-outline-light:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 15px rgba(255,255,255,0.3) !important;
-        transition: all 0.3s ease !important;
-        background-color: rgba(255,255,255,0.1) !important;
+    
+    @@keyframes toothFloat {
+        0%, 100% { 
+            transform: translate(-50%, -50%) rotate(0deg) scale(1); 
+        }
+        25% { 
+            transform: translate(-48%, -52%) rotate(5deg) scale(1.05); 
+        }
+        50% { 
+            transform: translate(-52%, -48%) rotate(-5deg) scale(1.1); 
+        }
+        75% { 
+            transform: translate(-48%, -52%) rotate(3deg) scale(1.05); 
+        }
     }
-    .card-custom {
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 -4px 15px rgba(0,0,0,0.08), 0 8px 25px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        margin-bottom: 20px;
+    
+    .tooth-bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: brightness(1.5) contrast(0.8);
     }
-    .card-custom:hover {
-        transform: translateY(-5px) !important;
-        box-shadow: 0 -8px 25px rgba(0,0,0,0.12), 0 15px 35px rgba(0,0,0,0.15) !important;
+    
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 50%, rgba(0, 217, 255, 0.2) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 50%, rgba(124, 58, 237, 0.2) 0%, transparent 50%);
+        filter: blur(40px);
+        animation: heroFloat 10s ease-in-out infinite;
     }
-    /* Diş sağlığı kartının hover'ını kapat */
-    .card-custom.no-hover:hover {
-        transform: none !important;
-        box-shadow: 0 -4px 15px rgba(0,0,0,0.08), 0 8px 25px rgba(0,0,0,0.1) !important;
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
     }
-    .icon-box {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
+    
+    .hero-content h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 50%, #10B981 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1.5rem;
+        animation: gradientShift 5s ease infinite;
+        background-size: 200% 200%;
+        text-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+    }
+    
+    .hero-content h2 {
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .hero-content .lead {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        color: var(--light);
+        font-weight: 400;
+        opacity: 0.95;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Glass Cards */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
+    
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        transform: rotate(45deg);
+        transition: all 0.5s ease;
+        opacity: 0;
+    }
+    
+    .glass-card:hover::before {
+        opacity: 1;
+        top: -60%;
+        left: -60%;
+    }
+    
+    .glass-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(0, 217, 255, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 217, 255, 0.2);
+    }
+    
+    /* Feature Cards */
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 20px;
-        font-size: 30px;
-        color: white;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 1;
     }
-    .icon-profile { background: linear-gradient(45deg, #ff6b6b, #feca57); }
-    .icon-health { background: linear-gradient(45deg, #48cae4, #023e8a); }
-    .icon-notes { background: linear-gradient(45deg, #51cf66, #087f5b); }
-    .btn-custom {
-        border-radius: 25px;
-        padding: 12px 30px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+    
+    .feature-icon-1 {
+        background: linear-gradient(135deg, #00D9FF 0%, #0099CC 100%);
+        box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+    }
+    
+    .feature-icon-2 {
+        background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+        box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+    }
+    
+    .feature-icon-3 {
+        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    }
+    
+    /* Stats Cards */
+    .stats-card {
+        background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
         transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
     }
-    .btn-primary-custom {
-        background: linear-gradient(45deg, #667eea, #764ba2);
+    
+    .stats-card::after {
+        content: '';
+        position: absolute;
+        bottom: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 50%);
+        animation: pulse 4s ease-in-out infinite;
+    }
+    
+    .stats-number {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+        border-radius: 30px;
+        padding: 4rem;
+        margin: 4rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(0, 217, 255, 0.3) 0%, transparent 60%);
+        filter: blur(60px);
+        animation: ctaFloat 8s ease-in-out infinite;
+    }
+    
+    /* Button Styles */
+    .btn-gradient {
+        background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 100%);
         border: none;
         color: white;
+        padding: 1rem 3rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
     }
-
-    btn-outline-light:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 15px rgba(255,255,255,0.3) !important;
-        transition: all 0.3s ease !important;
-        background-color: rgba(255,255,255,0.1) !important;
+    
+    .btn-gradient::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #7C3AED 0%, #00D9FF 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
     }
-    <!--TODO: Nasıl düzeldi anlamadım ama oldu sakin ELLEME-->
-    .btn-primary-custom:hover {
+    
+    .btn-gradient:hover::before {
+        opacity: 1;
+    }
+    
+    .btn-gradient:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 10px 30px rgba(0, 217, 255, 0.4);
     }
-    .recommendation-box, .stats-card {
-        height: 250px; 
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        margin: 20px 0;
-        border-radius: 15px;
-        padding: 25px;
-    }
+    
+    /* Recommendation Box */
     .recommendation-box {
-        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
-        text-align: center;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(0, 217, 255, 0.2) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
     }
-    .stats-card {
-        background: linear-gradient(135deg, #8A9DA6 0%, #00244A 100%);
-        text-align: center;
+    
+    .recommendation-box .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        animation: bounce 2s ease-in-out infinite;
     }
+    
+    /* Recent Activities */
+    .activity-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .activity-item:hover {
+        background: rgba(255, 255, 255, 0.06);
+        transform: translateX(5px);
+        border-color: rgba(0, 217, 255, 0.3);
+    }
+    
+    .activity-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    
+    .badge-success {
+        background: rgba(16, 185, 129, 0.2);
+        color: #10B981;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .badge-warning {
+        background: rgba(245, 158, 11, 0.2);
+        color: #F59E0B;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    
+    /* Responsive - media query */
 </style>
 
 @if (TempData["BilgiMesaji"] != null)
 {
-    <div class="alert alert-info alert-dismissible fade show" role="alert">
+    <div class="alert alert-info alert-dismissible fade show glass-card" role="alert" data-aos="fade-down">
+        <i class="fas fa-info-circle me-2"></i>
         @TempData["BilgiMesaji"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
     </div>
 }
 
 @if (Context.Session.GetInt32("KullaniciId") != null)
 {
-    <div class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4 fw-bold mb-3">🦷 Hoş Geldiniz!</h1>
-            <h2 class="mb-4">@Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")</h2>
-            <p class="lead">Ağız ve diş sağlığınızı takip etmeye devam edin!</p>
+    <!-- Authenticated User Hero -->
+    <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="tooth-bg">
+            <img src="~/uploads/teeth.jpg" alt="Tooth Background" />
         </div>
-    </div>
-
-    <div class="container">
-        <div class="row">
-            <!-- Tek Kart: Diş Sağlığı Takibi -->
-            <div class="col-md-12 mb-4">
-                <div class="card card-custom no-hover h-100" style="background: linear-gradient(90deg,rgba(0, 36, 74, 1) 0%,
-                 rgba(159, 179, 196, 1) 50%, rgba(0, 36, 74, 1) 100%);">
-                    <div class="card-body text-center">
-                        <h5 class="card-title display-3 fw-bold text-light">Diş Sağlığı Takibi</h5>
-                        <p class="card-text text-light">Hedeflerinizi belirleyin ve günlük takibinizi yapın.</p>
-                        <a asp-controller="Hedef" asp-action="Index" class="btn btn-outline-light btn-custom btn-lg">Diş Sağlığı Takibi</a>
+        <div class="container position-relative">
+            <div class="row align-items-center">
+                <div class="col-lg-8" data-aos="fade-right">
+                    <div class="hero-content">
+                        <h1>Hoş Geldin!</h1>
+                        <h2 class="h3 mb-4 text-primary">@Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")</h2>
+                        <p class="lead">Gülüşünüzün sağlığı, parmağınızın ucunda!</p>
+                        <a asp-controller="Hedef" asp-action="Index" class="btn btn-gradient btn-lg">
+                            <i class="fas fa-chart-line me-2"></i>Sağlık Takibine Git
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="row" style="margin-top: -8px;">
-            <!-- Rastgele Öneri -->
-            <div class="col-md-6">
-                <div class="recommendation-box">
-                    <h5 class="fw-bold mb-3 text-light">💡 Günün Önerisi</h5>
-                    <p class="mb-0 text-light">@ViewBag.RastgeleOneri</p>
+    <!-- Stats Section -->
+    <div class="container mb-5">
+        <div class="row g-4" data-aos="fade-up">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div class="stats-number">7</div>
+                    <p class="mb-0 mt-2">Günlük Takip</p>
                 </div>
             </div>
-            <!-- Son 7 Gün İstatistikleri -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="stats-card">
-                    <h5 class="fw-bold mb-3 text-light">📊 Son 7 Gün Özeti</h5>
+                    <div class="stats-number">@(ViewBag.HedefSayisi ?? 0)</div>
+                    <p class="mb-0 mt-2">Aktif Hedef</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <div class="stats-number">100%</div>
+                    <p class="mb-0 mt-2">Motivasyon</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendation & Activities -->
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="recommendation-box text-center">
+                    <div class="icon">💡</div>
+                    <h4 class="mb-3">Günün Önerisi</h4>
+                    <p class="lead mb-0">@ViewBag.RastgeleOneri</p>
+                </div>
+            </div>
+            
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="glass-card">
+                    <h4 class="mb-4">
+                        <i class="fas fa-history me-2 text-primary"></i>
+                        Son Aktiviteler
+                    </h4>
                     @if (ViewBag.Son7GunKayitlari != null)
                     {
                         @foreach (dynamic kayit in ViewBag.Son7GunKayitlari)
                         {
-                            <div class="mb-1 text-light small">
-                                • @kayit.HedefBaslik - @kayit.Tarih @kayit.Saat 
-                                @if (!string.IsNullOrEmpty(kayit.Sure))
-                                {
-                                    <span>(@kayit.Sure)</span>
-                                }
-                                @kayit.Uygulandi
+                            <div class="activity-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@kayit.HedefBaslik</strong>
+                                        <small class="d-block text-muted">
+                                            @kayit.Tarih • @kayit.Saat
+                                            @if (!string.IsNullOrEmpty(kayit.Sure))
+                                            {
+                                                <span>(@kayit.Sure)</span>
+                                            }
+                                        </small>
+                                    </div>
+                                    <span class="activity-badge @(kayit.Uygulandi.Contains("✓") ? "badge-success" : "badge-warning")">
+                                        @kayit.Uygulandi
+                                    </span>
+                                </div>
                             </div>
                         }
                     }
                     else
                     {
-                        <p class="text-dark mb-0">Henüz kayıt bulunmuyor.</p>
+                        <p class="text-muted text-center">Henüz aktivite kaydı bulunmuyor.</p>
                     }
                 </div>
             </div>
@@ -168,52 +417,76 @@
 }
 else
 {
-    <div class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-3 fw-bold mb-4">🦷 Ağız ve Diş Sağlığı Takip</h1>
-            <p class="lead mb-4">Diş sağlığınızı takip edin, hedefler belirleyin ve sağlıklı alışkanlıklar edinin!</p>
-            <div class="mt-4">
-                <a asp-controller="Kullanici" asp-action="Kayit" class="btn btn-light btn-custom btn-lg me-3">Kayıt Ol</a>
-                <a asp-controller="Kullanici" asp-action="Giris" class="btn btn-outline-light btn-custom btn-lg">Giriş Yap</a>
+    <!-- Guest Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="tooth-bg">
+            <img src="~/uploads/teeth.jpg" alt="Tooth Background" />
+        </div>
+        <div class="container position-relative">
+            <div class="text-center hero-content" data-aos="zoom-in">
+                <h1 class="mb-4">Güzellik detaylarda, detaylar gülüşünüzde.</h1>
+                <p class="lead mb-5">Akıllı öneri destekli diş sağlığı takip sistemi ile sağlıklı bir gülüşe kavuşun</p>
+                <div class="d-flex gap-3 justify-content-center">
+                    <a asp-controller="Kullanici" asp-action="Kayit" class="btn btn-gradient btn-lg">
+                        <i class="fas fa-rocket me-2"></i>Hemen Başla
+                    </a>
+                    <a asp-controller="Kullanici" asp-action="Giris" class="btn btn-glass btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <div class="container my-5">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="display-5 fw-bold mb-3">Neden Biz?</h2>
+            <p class="lead text-white">Diş sağlığınızı takip etmenin en akıllı yolu</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-card text-center h-100">
+                    <div class="feature-icon feature-icon-1 mx-auto">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h4 class="mb-3">Akıllı Hedefler</h4>
+                    <p class="text-white">Kişiselleştirilmiş hedefler belirleyin ve diş sağlığınızı geliştirin</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card text-center h-100">
+                    <div class="feature-icon feature-icon-2 mx-auto">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4 class="mb-3">Detaylı Analiz</h4>
+                    <p class="text-white">İlerlemenizi takip edin ve görsel raporlarla motivasyonunuzu artırın</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="glass-card text-center h-100">
+                    <div class="feature-icon feature-icon-3 mx-auto">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4 class="mb-3">Akıllı Öneriler</h4>
+                    <p class="text-white">Akıllı kişisel önerilerle sağlıklı alışkanlıklar edinin</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card card-custom text-center">
-                    <div class="card-body">
-                        <div class="icon-box icon-health">
-                            🎯
-                        </div>
-                        <h5 class="fw-bold">Hedef Belirleme</h5>
-                        <p>Diş bakım hedeflerinizi belirleyin ve takip edin.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom text-center">
-                    <div class="card-body">
-                        <div class="icon-box icon-notes">
-                            📈
-                        </div>
-                        <h5 class="fw-bold">İlerleme Takibi</h5>
-                        <p>Günlük aktivitelerinizi kaydedin ve ilerlemenizi izleyin.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom text-center">
-                    <div class="card-body">
-                        <div class="icon-box icon-profile">
-                            💡
-                        </div>
-                        <h5 class="fw-bold">Kişisel Öneriler</h5>
-                        <p>Size özel sağlık önerileri alın ve alışkanlıklar geliştirin.</p>
-                    </div>
-                </div>
-            </div>
+    <!-- CTA Section -->
+    <section class="cta-section" data-aos="zoom-in">
+        <div class="text-center position-relative">
+            <h2 class="display-5 fw-bold mb-4">Sağlıklı Bir Gülüşe Hazır mısınız?</h2>
+            <p class="lead mb-4">Hesap oluşturun ve diş sağlığınızı kontrol altına alın</p>
+            <a asp-controller="Kullanici" asp-action="Kayit" class="btn btn-gradient btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Kayıt Ol
+            </a>
         </div>
-    </div>
+    </section>
 }

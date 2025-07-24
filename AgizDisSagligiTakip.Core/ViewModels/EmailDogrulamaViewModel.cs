@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 
-using System.ComponentModel.DataAnnotations;
-
 namespace AgizDisSagligiTakip.Core.ViewModels
 {
     public class EmailDogrulamaViewModel
@@ -19,6 +17,7 @@ namespace AgizDisSagligiTakip.Core.ViewModels
         public string Ad { get; set; }
         public string Soyad { get; set; }
         public string Sifre { get; set; }
+        public int KullaniciId { get; set; }
         public DateTime DogumTarihi { get; set; }
     }
 }

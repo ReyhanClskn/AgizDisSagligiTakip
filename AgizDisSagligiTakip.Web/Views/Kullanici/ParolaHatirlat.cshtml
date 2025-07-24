@@ -5,102 +5,222 @@
 }
 
 <style>
-    /* Aynı login sayfası CSS'leri */
-    body {
-        background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%) !important;
-        min-height: 100vh;
-    }
-
     .login-container {
         min-height: 70vh;
         display: flex;
         align-items: center;
-        background: transparent;
         padding: 20px 0;
     }
 
     .login-card {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 
-            0 15px 35px rgba(0, 36, 74, 0.15),
-            0 5px 15px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(0, 217, 255, 0.1);
         overflow: hidden;
         transform: perspective(1000px) rotateX(0deg);
         transition: all 0.3s ease;
-        border: none;
+    }
+
+    .login-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 70px rgba(0, 217, 255, 0.15);
     }
 
     .login-header {
-        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(0, 217, 255, 0.2) 100%);
         color: white;
         padding: 30px;
         text-align: center;
         border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .login-header h3 {
         margin: 0;
-        font-weight: 600;
-        font-size: 1.8rem;
+        font-weight: 700;
+        font-size: 2rem;
+        background: linear-gradient(135deg, #10B981 0%, #00D9FF 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .login-header p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
     }
 
     .login-body {
         padding: 40px;
+        position: relative;
+    }
+
+    /* Decorative elements */
+    .login-body::before {
+        content: '\f084'; /* Font Awesome key icon */
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 100px;
+        color: rgba(16, 185, 129, 0.05);
+        transform: rotate(-15deg);
     }
 
     .form-control {
-        border-radius: 12px;
-        border: 2px solid #e9ecef;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
         padding: 12px 16px;
         transition: all 0.3s ease;
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        color: var(--light);
     }
 
     .form-control:focus {
-        border-color: #00244A;
-        box-shadow: 0 0 0 0.2rem rgba(0, 36, 74, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+        color: var(--light);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
     }
 
     .btn-login, .btn-success-custom {
-        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        background: linear-gradient(135deg, #10B981 0%, #00D9FF 100%);
         border: none;
-        border-radius: 12px;
+        border-radius: 50px;
         padding: 14px 30px;
         color: white;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 1.1rem;
-        box-shadow: 0 4px 15px rgba(0, 36, 74, 0.3);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         transition: all 0.3s ease;
         width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-login::before, .btn-success-custom::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #00D9FF 0%, #10B981 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .btn-login:hover::before, .btn-success-custom:hover::before {
+        opacity: 1;
     }
 
     .btn-login:hover, .btn-success-custom:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 36, 74, 0.4);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
         color: white;
     }
 
     .form-label {
         font-weight: 500;
-        color: #495057;
+        color: var(--light);
         margin-bottom: 8px;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-text {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
     }
 
     .btn-link {
-        color: #00244A;
+        color: var(--primary);
         text-decoration: none;
         font-weight: 500;
+        transition: all 0.3s ease;
     }
 
     .btn-link:hover {
-        color: #8A9DA6;
+        color: var(--primary-dark);
+        text-decoration: underline;
     }
 
     .alert {
-        border-radius: 12px;
+        border-radius: 15px;
         border: none;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .alert-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10B981;
+    }
+
+    .alert-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #EF4444;
+    }
+
+    .alert-info {
+        background: rgba(0, 217, 255, 0.1);
+        border: 1px solid rgba(0, 217, 255, 0.3);
+        color: #00D9FF;
+    }
+
+    /* Code input styling */
+    input[name="DogrulamaKodu"] {
+        font-size: 20px;
+        text-align: center;
+        letter-spacing: 5px;
+        font-weight: 600;
+        font-family: 'Courier New', monospace;
+    }
+
+    /* Step indicator */
+    .step-indicator {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+        gap: 1rem;
+    }
+
+    .step {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .step.active {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    }
+
+    .step.inactive {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
     }
 </style>
 
@@ -110,7 +230,7 @@
             <div class="col-md-6">
                 <div class="card login-card">
                     <div class="card-header login-header">
-                        <h3>Parola Hatırlatma</h3>
+                        <h3><i class="fas fa-key me-2"></i>Parola Hatırlatma</h3>
                         <p class="mb-0 mt-2">
                             @if (!Model?.DogrulamaKoduGonderildi == true)
                             {
@@ -127,9 +247,17 @@
                         </p>
                     </div>
                     <div class="card-body login-body">
+                        <!-- Step Indicator -->
+                        <div class="step-indicator">
+                            <div class="step @(Model?.DogrulamaKoduGonderildi != true ? "active" : "inactive")">1</div>
+                            <div class="step @(Model?.DogrulamaKoduGonderildi == true && Model?.EmailDogrulandi != true ? "active" : "inactive")">2</div>
+                            <div class="step @(Model?.EmailDogrulandi == true ? "active" : "inactive")">3</div>
+                        </div>
+
                         @if (TempData["BasariMesaji"] != null)
                         {
                             <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
                                 @TempData["BasariMesaji"]
                             </div>
                         }
@@ -137,6 +265,7 @@
                         @if (ViewData.ModelState.ErrorCount > 0)
                         {
                             <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
                                 @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                                 {
                                     <div>@error.ErrorMessage</div>
@@ -147,6 +276,7 @@
                         <form method="post" action="/Kullanici/ParolaHatirlat">
                             @Html.AntiForgeryToken()
 
+                            <!-- ÖNEMLİ: Hidden inputlar korundu -->
                             <input type="hidden" name="EmailDogrulandi" value="@Model?.EmailDogrulandi.ToString().ToLower()" />
                             <input type="hidden" name="DogrulamaKoduGonderildi" value="@Model?.DogrulamaKoduGonderildi.ToString().ToLower()" />
 
@@ -154,52 +284,68 @@
                             {
                                 <!-- 1. Adım: Email gir -->
                                 <div class="mb-4">
-                                    <label for="Email" class="form-label">E-posta</label>
+                                    <label for="Email" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>E-posta
+                                    </label>
                                     <input id="Email" name="Email" class="form-control" type="email" 
                                            value="@(Model?.Email ?? "")" 
                                            placeholder="ornek@email.com" required />
                                 </div>
 
                                 <div class="d-grid mb-4">
-                                    <button type="submit" class="btn btn-login">Doğrulama Kodu Gönder</button>
+                                    <button type="submit" class="btn btn-login">
+                                        <i class="fas fa-paper-plane me-2"></i>Doğrulama Kodu Gönder
+                                    </button>
                                 </div>
                             }
                             else if (!Model?.EmailDogrulandi == true)
                             {
                                 <!-- 2. Adım: Doğrulama kodu + Yeni şifre -->
+                                <!-- ÖNEMLİ: Email hidden input korundu -->
                                 <input type="hidden" name="Email" value="@Model.Email" />
                                 
                                 <div class="alert alert-info">
-                                    ✅ <strong>@Model.Email</strong> adresine doğrulama kodu gönderildi.
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <strong>@Model.Email</strong> adresine doğrulama kodu gönderildi.
                                 </div>
 
                                 <div class="mb-4">
-                                    <label for="DogrulamaKodu" class="form-label">Doğrulama Kodu</label>
+                                    <label for="DogrulamaKodu" class="form-label">
+                                        <i class="fas fa-shield-check me-1"></i>Doğrulama Kodu
+                                    </label>
                                     <input id="DogrulamaKodu" name="DogrulamaKodu" class="form-control" type="text" 
-                                           placeholder="6 haneli kod" maxlength="6" required />
+                                           placeholder="000000" maxlength="6" required />
                                     <div class="form-text">Email adresinize gönderilen 6 haneli kodu girin</div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label for="YeniSifre" class="form-label">Yeni Şifre</label>
+                                    <label for="YeniSifre" class="form-label">
+                                        <i class="fas fa-lock me-1"></i>Yeni Şifre
+                                    </label>
                                     <input id="YeniSifre" name="YeniSifre" class="form-control" type="password" 
                                            placeholder="Yeni şifrenizi girin" required />
                                     <div class="form-text">En az 8 karakter, büyük-küçük harf ve rakam içermeli</div>
                                 </div>
 
                                 <div class="mb-4">
-                                    <label for="YeniSifreTekrar" class="form-label">Yeni Şifre Tekrar</label>
+                                    <label for="YeniSifreTekrar" class="form-label">
+                                        <i class="fas fa-lock me-1"></i>Yeni Şifre Tekrar
+                                    </label>
                                     <input id="YeniSifreTekrar" name="YeniSifreTekrar" class="form-control" type="password" 
                                            placeholder="Şifrenizi tekrar girin" required />
                                 </div>
 
                                 <div class="d-grid mb-4">
-                                    <button type="submit" class="btn btn-success-custom">Şifreyi Güncelle</button>
+                                    <button type="submit" class="btn btn-success-custom">
+                                        <i class="fas fa-sync-alt me-2"></i>Şifreyi Güncelle
+                                    </button>
                                 </div>
                             }
 
                             <div class="text-center">
-                                <a href="/Kullanici/Giris" class="btn btn-link">Giriş Sayfasına Dön</a>
+                                <a href="/Kullanici/Giris" class="btn btn-link">
+                                    <i class="fas fa-arrow-left me-1"></i>Giriş Sayfasına Dön
+                                </a>
                             </div>
                         </form>
                     </div>

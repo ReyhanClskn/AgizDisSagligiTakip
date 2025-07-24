@@ -5,76 +5,166 @@
 }
 
 <style>
+    .profile-container {
+        padding: 2rem 0;
+    }
+
     .card {
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(0, 217, 255, 0.1);
         overflow: hidden;
     }
 
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 70px rgba(0, 217, 255, 0.15);
+    }
+
     .card-header {
-        border-radius: 15px 15px 0 0 !important;
+        background: linear-gradient(135deg, rgba(0, 217, 255, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
         border: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px 30px 0 0 !important;
         margin: 0 !important;
     }
 
+    .card-header h3 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 2rem;
+        background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .card-body {
+        padding: 40px;
+    }
+
     .form-control {
-        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 12px 16px;
+        transition: all 0.3s ease;
+        color: var(--light);
     }
 
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+        color: var(--light);
+    }
+
+    .form-control[readonly] {
+        background: rgba(255, 255, 255, 0.02);
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: var(--light);
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-text {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.875rem;
+    }
+
+    .text-muted {
+        color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    hr {
+        border-color: rgba(255, 255, 255, 0.1);
+        margin: 2rem 0;
+    }
+
+    /* Buttons */
     .btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
     }
 
-    .profil-btn {
-        background: #00244A !important;
+    .profil-btn, .custom-btn {
+        background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 100%);
         color: white !important;
         border: none !important;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-weight: 500;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profil-btn::before, .custom-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #7C3AED 0%, #00D9FF 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .profil-btn:hover::before, .custom-btn:hover::before {
+        opacity: 1;
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--light);
+        border-radius: 50px;
+        padding: 12px 24px;
+        font-weight: 600;
         transition: all 0.3s ease;
     }
 
-    .profil-btn:hover {
-        background: #8A9DA6 !important;
-        color: white !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: var(--primary);
+        color: var(--primary);
     }
 
-    .custom-btn {
-        background-color: #00244A !important;
-        border-color: #00244A !important;
-    }
-
-    .custom-btn:hover, .custom-btn:focus, .custom-btn:active {
-        background-color: #8A9DA6 !important;
-        border-color: #8A9DA6 !important;
-    }
-
-    .btn-danger-custom {
-        background-color: #dc3545 !important;
-        border-color: #dc3545 !important;
-        color: white !important;
+    .btn-danger, .btn-danger-custom {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #EF4444 !important;
+        border-radius: 50px;
+        padding: 12px 24px;
         font-weight: 600;
+        transition: all 0.3s ease;
     }
 
-    .btn-danger-custom:hover {
-        background-color: #bd2130 !important;
-        border-color: #bd2130 !important;
-    }
-
-    .modal-header-danger {
-        background-color: #dc3545;
-        color: white;
-    }
-
-    .warning-list {
-        background-color: #fff3cd;
-        border-left: 4px solid #ffc107;
-        padding: 15px;
-        margin: 15px 0;
+    .btn-danger:hover, .btn-danger-custom:hover {
+        background: rgba(239, 68, 68, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+        color: white !important;
     }
 
     /* Profil Fotoğrafı Stilleri */
@@ -82,7 +172,7 @@
         position: relative;
         width: 150px;
         height: 150px;
-        margin: 0 auto 20px;
+        margin: 0 auto 30px;
     }
 
     .profile-photo {
@@ -90,13 +180,20 @@
         height: 150px;
         border-radius: 50%;
         object-fit: cover;
-        border: 4px solid #00244A;
-        background-color: #f8f9fa;
+        border: 4px solid var(--primary);
+        background: rgba(255, 255, 255, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 80px;
-        color: #6c757d;
+        color: var(--primary);
+        box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .profile-photo:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(0, 217, 255, 0.5);
     }
 
     .profile-photo img {
@@ -110,9 +207,9 @@
         position: absolute;
         bottom: 0;
         right: 0;
-        background-color: #00244A;
+        background: var(--primary);
         color: white;
-        border: none;
+        border: 3px solid var(--dark);
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -125,7 +222,7 @@
     }
 
     .photo-upload-btn:hover {
-        background-color: #8A9DA6;
+        background: var(--primary-dark);
         transform: scale(1.1);
     }
 
@@ -133,9 +230,9 @@
         position: absolute;
         top: 0;
         right: 0;
-        background-color: #dc3545;
+        background: #EF4444;
         color: white;
-        border: none;
+        border: 3px solid var(--dark);
         width: 30px;
         height: 30px;
         border-radius: 50%;
@@ -148,147 +245,248 @@
     }
 
     .photo-remove-btn:hover {
-        background-color: #bd2130;
+        background: #DC2626;
         transform: scale(1.1);
+    }
+
+    /* Alerts */
+    .alert {
+        border-radius: 15px;
+        border: none;
+        backdrop-filter: blur(10px);
+    }
+
+    .alert-success {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        color: #10B981;
+    }
+
+    .alert-danger {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #EF4444;
+    }
+
+    /* Modal Styles */
+    .modal-content {
+        background: var(--dark);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, rgba(0, 217, 255, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px 20px 0 0;
+    }
+
+    .modal-header-danger {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.3) 100%);
+        color: white;
+    }
+
+    .modal-title {
+        color: var(--light);
+        font-weight: 600;
+    }
+
+    .modal-body {
+        color: var(--light);
+        padding: 2rem;
+    }
+
+    .modal-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-close {
+        filter: invert(1);
+    }
+
+    .warning-list {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #F59E0B;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 15px 0;
+    }
+
+    .warning-list ul {
+        margin-bottom: 0;
+        padding-left: 20px;
     }
 
     /* Crop Modal Stilleri */
     #cropperContainer {
         max-height: 400px;
         overflow: hidden;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 10px;
     }
 
     .cropper-container {
         max-height: 400px !important;
+    }
+
+    /* Section Headers */
+    h5 {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 </style>
 
 <!-- Cropper.js CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card border">
-                <div class="card-header text-white" style="background: #00244A;">
-                    <h3 class="text-center mb-0">Profil Bilgileri</h3>
-                </div>
-                <div class="card-body">
-                    @if (TempData["BasariMesaji"] != null)
-                    {
-                        <div class="alert alert-success">
-                            @TempData["BasariMesaji"]
-                        </div>
-                    }
+<div class="profile-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-circle me-2"></i>Profil Bilgileri</h3>
+                    </div>
+                    <div class="card-body">
+                        @if (TempData["BasariMesaji"] != null)
+                        {
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                @TempData["BasariMesaji"]
+                            </div>
+                        }
 
-                    @if (ViewData.ModelState.ErrorCount > 0)
-                    {
-                        <div class="alert alert-danger">
-                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                            {
-                                <div>@error.ErrorMessage</div>
-                            }
-                        </div>
-                    }
+                        @if (ViewData.ModelState.ErrorCount > 0)
+                        {
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <div>@error.ErrorMessage</div>
+                                }
+                            </div>
+                        }
 
-                    <form method="post" action="/Kullanici/Profil" enctype="multipart/form-data">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="Id" value="@Model.Id" />
-                        <input type="hidden" name="KayitTarihi" value="@Model.KayitTarihi" />
-                        <input type="hidden" id="croppedImageData" name="CroppedImageData" />
+                        <form method="post" action="/Kullanici/Profil" enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="Id" value="@Model.Id" />
+                            <input type="hidden" name="KayitTarihi" value="@Model.KayitTarihi" />
+                            <input type="hidden" id="croppedImageData" name="CroppedImageData" />
 
-                        <!-- Profil Fotoğrafı -->
-                        <div class="profile-photo-container">
-                            <div class="profile-photo" id="profilePhotoDisplay">
+                            <!-- Profil Fotoğrafı -->
+                            <div class="profile-photo-container">
+                                <div class="profile-photo" id="profilePhotoDisplay">
+                                    @if (!string.IsNullOrEmpty(Model.ProfilFotoUrl))
+                                    {
+                                        <img src="@Model.ProfilFotoUrl" alt="Profil Fotoğrafı">
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-user"></i>
+                                    }
+                                </div>
+                                <button type="button" class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
+                                    <i class="fas fa-camera"></i>
+                                </button>
                                 @if (!string.IsNullOrEmpty(Model.ProfilFotoUrl))
                                 {
-                                    <img src="@Model.ProfilFotoUrl" alt="Profil Fotoğrafı">
+                                    <button type="button" class="photo-remove-btn" id="removePhotoBtn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
                                 }
-                                else
-                                {
-                                    <span>👤</span>
-                                }
+                                <input type="file" id="photoInput" accept="image/*" style="display: none;">
                             </div>
-                            <button type="button" class="photo-upload-btn" onclick="document.getElementById('photoInput').click()">
-                                📷
-                            </button>
-                            @if (!string.IsNullOrEmpty(Model.ProfilFotoUrl))
-                            {
-                                <button type="button" class="photo-remove-btn" id="removePhotoBtn">
-                                    ✖
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="Ad" class="form-label">
+                                            <i class="fas fa-user me-1"></i>Ad
+                                        </label>
+                                        <input id="Ad" name="Ad" class="form-control" type="text" 
+                                               value="@Model.Ad" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="Soyad" class="form-label">
+                                            <i class="fas fa-user me-1"></i>Soyad
+                                        </label>
+                                        <input id="Soyad" name="Soyad" class="form-control" type="text" 
+                                               value="@Model.Soyad" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="Email" class="form-label">
+                                    <i class="fas fa-envelope me-1"></i>E-posta
+                                </label>
+                                <input id="Email" name="Email" class="form-control" type="email" 
+                                       value="@Model.Email" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="DogumTarihi" class="form-label">
+                                    <i class="fas fa-calendar me-1"></i>Doğum Tarihi
+                                </label>
+                                <input id="DogumTarihi" name="DogumTarihi" class="form-control" type="date" 
+                                       value="@Model.DogumTarihi.ToString("yyyy-MM-dd")" required />
+                            </div>
+
+                            <hr class="my-4">
+                            <h5><i class="fas fa-key"></i>Şifre Değiştir (İsteğe Bağlı)</h5>
+                            <p class="text-muted">Şifrenizi değiştirmek istemiyorsanız bu alanları boş bırakın.</p>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="YeniSifre" class="form-label">
+                                            <i class="fas fa-lock me-1"></i>Yeni Şifre
+                                        </label>
+                                        <input id="YeniSifre" name="YeniSifre" class="form-control" type="password" />
+                                        <div class="form-text">En az 8 karakter, büyük-küçük harf ve rakam içermeli</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="YeniSifreTekrar" class="form-label">
+                                            <i class="fas fa-lock me-1"></i>Yeni Şifre Tekrar
+                                        </label>
+                                        <input id="YeniSifreTekrar" name="YeniSifreTekrar" class="form-control" type="password" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-clock me-1"></i>Kayıt Tarihi
+                                </label>
+                                <input class="form-control" type="text" 
+                                       value="@Model.KayitTarihi.ToString("dd.MM.yyyy HH:mm")" readonly />
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between">
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hesapSilModal">
+                                    <i class="fas fa-trash-alt me-2"></i>Hesabımı Sil
                                 </button>
-                            }
-                            <input type="file" id="photoInput" accept="image/*" style="display: none;">
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="Ad" class="form-label">Ad</label>
-                                    <input id="Ad" name="Ad" class="form-control" type="text" 
-                                           value="@Model.Ad" required />
+                                <div>
+                                    <a href="/" class="btn btn-secondary me-md-2">
+                                        <i class="fas fa-home me-2"></i>Ana Sayfa
+                                    </a>
+                                    <button type="submit" class="btn btn-primary custom-btn">
+                                        <i class="fas fa-save me-2"></i>Güncelle
+                                    </button>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="Soyad" class="form-label">Soyad</label>
-                                    <input id="Soyad" name="Soyad" class="form-control" type="text" 
-                                           value="@Model.Soyad" required />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="Email" class="form-label">E-posta</label>
-                            <input id="Email" name="Email" class="form-control" type="email" 
-                                   value="@Model.Email" required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="DogumTarihi" class="form-label">Doğum Tarihi</label>
-                            <input id="DogumTarihi" name="DogumTarihi" class="form-control" type="date" 
-                                   value="@Model.DogumTarihi.ToString("yyyy-MM-dd")" required />
-                        </div>
-
-                        <hr class="my-4">
-                        <h5>Şifre Değiştir (İsteğe Bağlı)</h5>
-                        <p class="text-muted">Şifrenizi değiştirmek istemiyorsanız bu alanları boş bırakın.</p>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="YeniSifre" class="form-label">Yeni Şifre</label>
-                                    <input id="YeniSifre" name="YeniSifre" class="form-control" type="password" />
-                                    <div class="form-text">En az 8 karakter, büyük-küçük harf ve rakam içermeli</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="YeniSifreTekrar" class="form-label">Yeni Şifre Tekrar</label>
-                                    <input id="YeniSifreTekrar" name="YeniSifreTekrar" class="form-control" type="password" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="my-4">
-                        <div class="mb-3">
-                            <label class="form-label">Kayıt Tarihi</label>
-                            <input class="form-control" type="text" 
-                                   value="@Model.KayitTarihi.ToString("dd.MM.yyyy HH:mm")" readonly />
-                        </div>
-
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-between">
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#hesapSilModal">
-                                🗑️ Hesabımı Sil
-                            </button>
-                            <div>
-                                <a href="/" class="btn btn-secondary me-md-2">Ana Sayfaya Dön</a>
-                                <button type="submit" class="btn btn-primary custom-btn">
-                                    💾 Bilgileri Güncelle
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -300,7 +498,9 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cropModalLabel">Profil Fotoğrafını Düzenle</h5>
+                <h5 class="modal-title" id="cropModalLabel">
+                    <i class="fas fa-crop me-2"></i>Profil Fotoğrafını Düzenle
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -310,7 +510,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-primary" id="cropBtn">Kırp ve Kaydet</button>
+                <button type="button" class="btn btn-primary custom-btn" id="cropBtn">
+                    <i class="fas fa-check me-2"></i>Kırp ve Kaydet
+                </button>
             </div>
         </div>
     </div>
@@ -321,7 +523,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header modal-header-danger">
-                <h5 class="modal-title" id="hesapSilModalLabel">⚠️ Hesap Silme Onayı</h5>
+                <h5 class="modal-title" id="hesapSilModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Hesap Silme Onayı
+                </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -438,7 +642,7 @@
                             
                             // Remove butonunu göster
                             if ($('#removePhotoBtn').length === 0) {
-                                $('.profile-photo-container').append('<button type="button" class="photo-remove-btn" id="removePhotoBtn">✖</button>');
+                                $('.profile-photo-container').append('<button type="button" class="photo-remove-btn" id="removePhotoBtn"><i class="fas fa-times"></i></button>');
                                 bindRemovePhotoEvent();
                             }
                             
@@ -453,7 +657,7 @@
             function bindRemovePhotoEvent() {
                 $('#removePhotoBtn').off('click').on('click', function() {
                     if (confirm('Profil fotoğrafınızı kaldırmak istediğinizden emin misiniz?')) {
-                        $('#profilePhotoDisplay').html('<span>👤</span>');
+                        $('#profilePhotoDisplay').html('<i class="fas fa-user"></i>');
                         $('#croppedImageData').val('REMOVE');
                         $(this).remove();
                     }

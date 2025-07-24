@@ -5,108 +5,194 @@
 }
 
 <style>
-    /* Aynı login sayfası CSS'leri */
-    body {
-        background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%) !important;
-        min-height: 100vh;
-    }
-
     .login-container {
         min-height: 70vh;
         display: flex;
         align-items: center;
-        background: transparent;
         padding: 20px 0;
     }
 
     .login-card {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 
-            0 15px 35px rgba(0, 36, 74, 0.15),
-            0 5px 15px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(0, 217, 255, 0.1);
         overflow: hidden;
         transform: perspective(1000px) rotateX(0deg);
         transition: all 0.3s ease;
-        border: none;
+    }
+
+    .login-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 70px rgba(0, 217, 255, 0.15);
     }
 
     .login-header {
-        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(0, 217, 255, 0.2) 100%);
         color: white;
         padding: 30px;
         text-align: center;
         border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .login-header h3 {
         margin: 0;
-        font-weight: 600;
-        font-size: 1.8rem;
+        font-weight: 700;
+        font-size: 2rem;
+        background: linear-gradient(135deg, #7C3AED 0%, #00D9FF 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .login-header p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
     }
 
     .login-body {
         padding: 40px;
+        position: relative;
+    }
+
+    /* Decorative elements */
+    .login-body::before {
+        content: '\f5a0'; /* Font Awesome tooth icon */
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        font-size: 120px;
+        color: rgba(124, 58, 237, 0.05);
+        transform: rotate(15deg);
     }
 
     .form-control {
-        border-radius: 12px;
-        border: 2px solid #e9ecef;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
         padding: 12px 16px;
         transition: all 0.3s ease;
         box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        color: var(--light);
     }
 
     .form-control:focus {
-        border-color: #00244A;
-        box-shadow: 0 0 0 0.2rem rgba(0, 36, 74, 0.15);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+        color: var(--light);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Date input styling */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
     }
 
     .btn-login {
-        background: linear-gradient(135deg, #00244A 0%, #8A9DA6 100%);
+        background: linear-gradient(135deg, #7C3AED 0%, #00D9FF 100%);
         border: none;
-        border-radius: 12px;
+        border-radius: 50px;
         padding: 14px 30px;
         color: white;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 1.1rem;
-        box-shadow: 0 4px 15px rgba(0, 36, 74, 0.3);
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
         transition: all 0.3s ease;
         width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-login::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .btn-login:hover::before {
+        opacity: 1;
     }
 
     .btn-login:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 36, 74, 0.4);
+        box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
         color: white;
     }
 
     .form-label {
         font-weight: 500;
-        color: #495057;
+        color: var(--light);
         margin-bottom: 8px;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .btn-link {
-        color: #00244A;
+        color: var(--primary);
         text-decoration: none;
         font-weight: 500;
+        transition: all 0.3s ease;
     }
 
     .btn-link:hover {
-        color: #8A9DA6;
+        color: var(--primary-dark);
+        text-decoration: underline;
     }
 
     .text-danger {
-        color: #dc3545 !important;
+        color: #EF4444 !important;
         font-size: 0.875rem;
         margin-top: 5px;
     }
 
     .alert {
-        border-radius: 12px;
+        border-radius: 15px;
         border: none;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    /* Password strength indicator */
+    .password-hint {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: 10px;
+        padding: 10px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: #10B981;
+    }
+
+    .password-hint ul {
+        margin: 0;
+        padding-left: 20px;
+        list-style: none;
+    }
+
+    .password-hint li::before {
+        content: "✓ ";
+        color: #10B981;
+        font-weight: bold;
     }
 </style>
 
@@ -116,7 +202,7 @@
             <div class="col-md-6">
                 <div class="card login-card">
                     <div class="card-header login-header">
-                        <h3>Kullanıcı Kayıt</h3>
+                        <h3><i class="fas fa-user-plus me-2"></i>Kullanıcı Kayıt</h3>
                         <p class="mb-0 mt-2">Hesabınızı oluşturun ve sağlıklı alışkanlıklara başlayın</p>
                     </div>
                     <div class="card-body login-body">
@@ -126,14 +212,18 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label asp-for="Ad" class="form-label">Ad</label>
+                                        <label asp-for="Ad" class="form-label">
+                                            <i class="fas fa-user me-1"></i>Ad
+                                        </label>
                                         <input asp-for="Ad" class="form-control" placeholder="Adınız" />
                                         <span asp-validation-for="Ad" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label asp-for="Soyad" class="form-label">Soyad</label>
+                                        <label asp-for="Soyad" class="form-label">
+                                            <i class="fas fa-user me-1"></i>Soyad
+                                        </label>
                                         <input asp-for="Soyad" class="form-control" placeholder="Soyadınız" />
                                         <span asp-validation-for="Soyad" class="text-danger"></span>
                                     </div>
@@ -141,35 +231,55 @@
                             </div>
 
                             <div class="mb-3">
-                                <label asp-for="Email" class="form-label">E-posta</label>
+                                <label asp-for="Email" class="form-label">
+                                    <i class="fas fa-envelope me-1"></i>E-posta
+                                </label>
                                 <input asp-for="Email" class="form-control" type="email" placeholder="ornek@email.com" />
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3">
-                                <label asp-for="Sifre" class="form-label">Şifre</label>
+                                <label asp-for="Sifre" class="form-label">
+                                    <i class="fas fa-lock me-1"></i>Şifre
+                                </label>
                                 <input asp-for="Sifre" class="form-control" type="password" placeholder="En az 8 karakter" />
                                 <span asp-validation-for="Sifre" class="text-danger"></span>
+                                <div class="password-hint">
+                                    <small>Şifreniz şunları içermelidir:</small>
+                                    <ul>
+                                        <li>En az 8 karakter</li>
+                                        <li>Büyük ve küçük harf</li>
+                                        <li>En az bir rakam</li>
+                                    </ul>
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label asp-for="SifreTekrar" class="form-label">Şifre Tekrar</label>
+                                <label asp-for="SifreTekrar" class="form-label">
+                                    <i class="fas fa-lock me-1"></i>Şifre Tekrar
+                                </label>
                                 <input asp-for="SifreTekrar" class="form-control" type="password" placeholder="Şifrenizi tekrar girin" />
                                 <span asp-validation-for="SifreTekrar" class="text-danger"></span>
                             </div>
 
                             <div class="mb-4">
-                                <label asp-for="DogumTarihi" class="form-label">Doğum Tarihi</label>
+                                <label asp-for="DogumTarihi" class="form-label">
+                                    <i class="fas fa-calendar me-1"></i>Doğum Tarihi
+                                </label>
                                 <input asp-for="DogumTarihi" class="form-control" type="date" />
                                 <span asp-validation-for="DogumTarihi" class="text-danger"></span>
                             </div>
 
                             <div class="d-grid mb-4">
-                                <button type="submit" class="btn btn-login">Kayıt Ol</button>
+                                <button type="submit" class="btn btn-login">
+                                    <i class="fas fa-user-plus me-2"></i>Kayıt Ol
+                                </button>
                             </div>
 
                             <div class="text-center">
-                                <a asp-action="Giris" class="btn btn-link">Zaten hesabınız var mı? Giriş yapın</a>
+                                <a asp-action="Giris" class="btn btn-link">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Zaten hesabınız var mı? Giriş yapın
+                                </a>
                             </div>
                         </form>
                     </div>

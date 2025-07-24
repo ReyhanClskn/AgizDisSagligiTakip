@@ -3,7 +3,6 @@ using AgizDisSagligiTakip.Web.Models;
 using AgizDisSagligiTakip.Data.Context;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Localization;
 
 namespace AgizDisSagligiTakip.Web.Controllers
 {
@@ -60,18 +59,6 @@ namespace AgizDisSagligiTakip.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult SetLanguage(string culture, string returnUrl)
-        {
-            Response.Cookies.Append(
-                CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
-            );
-
-            return LocalRedirect(returnUrl);
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -80,9 +67,6 @@ namespace AgizDisSagligiTakip.Web.Controllers
 
         private string GetRastgeleOneri()
         {
-            // Mevcut dili al
-            var currentCulture = Thread.CurrentThread.CurrentUICulture.Name;
-            
             var aktifOneriler = _context.Oneriler.Where(o => o.Aktif).ToList();
             if (aktifOneriler.Any())
             {
@@ -90,11 +74,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 var rastgeleIndex = random.Next(aktifOneriler.Count);
                 return aktifOneriler[rastgeleIndex].Metin;
             }
-            
-            // Dile göre varsayılan öneri
-            return currentCulture == "en" 
-                ? "Don't neglect your oral and dental health!" 
-                : "Ağız ve diş sağlığınızı ihmal etmeyin!";
+            return "Ağız ve diş sağlığınızı ihmal etmeyin!";
         }
     }
 }
