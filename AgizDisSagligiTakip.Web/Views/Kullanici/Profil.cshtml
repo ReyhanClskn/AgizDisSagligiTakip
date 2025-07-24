@@ -321,13 +321,12 @@
     #cropperContainer {
         max-height: 400px;
         overflow: hidden;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
-        padding: 10px;
+        background-color: #ffffff !important;
     }
 
     .cropper-container {
         max-height: 400px !important;
+        background-color: #ffffff !important;
     }
 
     /* Section Headers */
@@ -343,6 +342,44 @@
 
 <!-- Cropper.js CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+
+<!-- Modal Backdrop Fix -->
+<style>
+    /* Modal backdrop z-index fix */
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+    
+    .modal {
+        z-index: 1050 !important;
+    }
+    
+    .modal-dialog {
+        z-index: 1060 !important;
+    }
+    
+    /* Cropper container beyaz arka plan */
+    #cropModal .modal-content {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
+    #cropModal .modal-header,
+    #cropModal .modal-body,
+    #cropModal .modal-footer {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
+    #cropModal .modal-title {
+        color: #000000 !important;
+    }
+    
+    #cropModal .btn-close {
+        filter: none !important;
+        opacity: 1 !important;
+    }
+</style>
 
 <div class="profile-container">
     <div class="container">
@@ -377,6 +414,7 @@
                             <input type="hidden" name="Id" value="@Model.Id" />
                             <input type="hidden" name="KayitTarihi" value="@Model.KayitTarihi" />
                             <input type="hidden" id="croppedImageData" name="CroppedImageData" />
+                            <input type="hidden" name="ProfilFotoUrl" value="@Model.ProfilFotoUrl" />
 
                             <!-- Profil Fotoğrafı -->
                             <div class="profile-photo-container">
@@ -494,25 +532,21 @@
 </div>
 
 <!-- Crop Modal -->
-<div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true">
+<div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true" data-bs-backdrop="false">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cropModalLabel">
-                    <i class="fas fa-crop me-2"></i>Profil Fotoğrafını Düzenle
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content" style="background-color: #ffffff !important;">
+            <div class="modal-header" style="background-color: #f8f9fa !important; border-bottom: 1px solid #dee2e6 !important;">
+                <h5 class="modal-title" id="cropModalLabel" style="color: #000000 !important;">Profil Fotoğrafını Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: none !important;"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="background-color: #ffffff !important;">
                 <div id="cropperContainer">
                     <img id="cropperImage" style="max-width: 100%;">
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="background-color: #f8f9fa !important; border-top: 1px solid #dee2e6 !important;">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-primary custom-btn" id="cropBtn">
-                    <i class="fas fa-check me-2"></i>Kırp ve Kaydet
-                </button>
+                <button type="button" class="btn btn-primary" id="cropBtn">Kırp ve Kaydet</button>
             </div>
         </div>
     </div>
@@ -582,6 +616,14 @@
         $(document).ready(function() {
             cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
 
+            // Form submit edilmeden önce kontrol
+            $('form').on('submit', function(e) {
+                // Eğer croppedImageData boşsa ve fotoğraf değiştirilmediyse
+                if (!$('#croppedImageData').val()) {
+                    $('#croppedImageData').val('NO_CHANGE');
+                }
+            });
+
             // Fotoğraf seçildiğinde
             $('#photoInput').change(function(e) {
                 const file = e.target.files[0];
@@ -589,10 +631,21 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         $('#cropperImage').attr('src', e.target.result);
+                        
+                        // Önce mevcut backdrop'ları temizle
+                        $('.modal-backdrop').remove();
+                        
+                        // Modal'ı göster
                         cropModal.show();
                     };
                     reader.readAsDataURL(file);
                 }
+            });
+
+            // Modal açılmadan önce backdrop kontrolü
+            $('#cropModal').on('show.bs.modal', function () {
+                // Eski backdrop'ları temizle
+                $('.modal-backdrop').remove();
             });
 
             // Crop modal açıldığında
