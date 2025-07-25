@@ -98,7 +98,6 @@
         margin: 2rem 0;
     }
 
-    /* Buttons */
     .btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
@@ -345,7 +344,6 @@
 
 <!-- Modal Backdrop Fix -->
 <style>
-    /* Modal backdrop z-index fix */
     .modal-backdrop {
         z-index: 1040 !important;
     }
@@ -618,7 +616,6 @@
 
             // Form submit edilmeden önce kontrol
             $('form').on('submit', function(e) {
-                // Eğer croppedImageData boşsa ve fotoğraf değiştirilmediyse
                 if (!$('#croppedImageData').val()) {
                     $('#croppedImageData').val('NO_CHANGE');
                 }
@@ -631,11 +628,7 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         $('#cropperImage').attr('src', e.target.result);
-                        
-                        // Önce mevcut backdrop'ları temizle
                         $('.modal-backdrop').remove();
-                        
-                        // Modal'ı göster
                         cropModal.show();
                     };
                     reader.readAsDataURL(file);
@@ -644,7 +637,6 @@
 
             // Modal açılmadan önce backdrop kontrolü
             $('#cropModal').on('show.bs.modal', function () {
-                // Eski backdrop'ları temizle
                 $('.modal-backdrop').remove();
             });
 
@@ -687,7 +679,6 @@
                     canvas.toBlob(function(blob) {
                         const reader = new FileReader();
                         reader.onloadend = function() {
-                            // Base64 formatında kaydet
                             $('#croppedImageData').val(reader.result);
                             
                             // Önizlemeyi güncelle

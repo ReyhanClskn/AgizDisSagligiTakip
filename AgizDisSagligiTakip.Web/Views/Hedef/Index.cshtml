@@ -80,6 +80,7 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        z-index: 1; /* İçerik önde olsun */
     }
     
     .glass-card-enhanced::after {
@@ -92,6 +93,8 @@
         background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 50%);
         opacity: 0;
         transition: opacity 0.3s ease;
+        pointer-events: none; /* Tıklamayı engellemesin */
+        z-index: -1; /* İçeriğin arkasında kalsın */
     }
     
     .glass-card-enhanced:hover::after {
@@ -128,7 +131,6 @@
         color: var(--primary);
     }
     
-    /* Recommendation Box Enhanced */
     .recommendation-enhanced {
         background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 100%);
         border-radius: 24px;
@@ -162,7 +164,6 @@
         line-height: 1.6;
     }
     
-    /* Activity Timeline */
     .activity-timeline {
         position: relative;
         padding-left: 30px;
@@ -206,8 +207,7 @@
         transform: translateX(5px);
         border-color: rgba(0, 217, 255, 0.3);
     }
-    
-    /* Form Controls Enhanced */
+
     .form-control-glass {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -249,7 +249,27 @@
         color: var(--light);
     }
     
-    /* Target Cards */
+    /* Decorative elements arkada kalsın */
+    .login-body::before,
+    .target-card::before,
+    .stats-card::after,
+    .cta-section::before {
+        pointer-events: none;
+        z-index: -1;
+    }
+    
+    /* Form elemanları önde olsun */
+    form,
+    input,
+    select,
+    textarea,
+    button,
+    .btn,
+    a {
+        position: relative;
+        z-index: 2;
+    }
+    
     .target-card {
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -259,6 +279,7 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        z-index: 1;
     }
     
     .target-card::before {
@@ -271,6 +292,8 @@
         background: var(--primary);
         transform: scaleY(0);
         transition: transform 0.3s ease;
+        pointer-events: none; /* Tıklamayı engellemesin */
+        z-index: -1;
     }
     
     .target-card:hover::before {
@@ -283,7 +306,6 @@
         box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2);
     }
     
-    /* Badge Styles Enhanced */
     .badge-glass {
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
@@ -319,7 +341,6 @@
         color: #00D9FF;
     }
     
-    /* Note Card */
     .note-card {
         background: rgba(255, 255, 255, 0.03);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -349,7 +370,6 @@
         box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
     }
     
-    /* Delete Button */
     .btn-delete-glass {
         background: rgba(239, 68, 68, 0.1);
         border: 1px solid rgba(239, 68, 68, 0.3);
@@ -367,7 +387,128 @@
         color: white;
     }
     
-    /* Responsive için media query'ler site.css dosyasında */
+    .scrollable-list {
+        max-height: 300px; 
+        overflow-y: auto;
+        padding-right: 10px; 
+    }
+
+    .scrollable-list::-webkit-scrollbar {
+        width: 8px;
+    }
+    .scrollable-list::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+    .scrollable-list::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+    }
+    .scrollable-list::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-dark);
+    }
+
+    /* TODO: Tekrarlanan ok ikonu sorunu (düzeldi) */
+    .form-select-glass {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--light);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+    }
+
+    .text-muted {
+        color: rgba(248, 250, 252, 0.7) !important; 
+    }
+    .text-muted i {
+        color: rgba(248, 250, 252, 0.7) !important; 
+    }
+
+    .alert-success {
+        background-color: rgba(16, 185, 129, 0.2); 
+        border-color: rgba(16, 185, 129, 0.4);
+        color: #F8FAFC; 
+    }
+
+    .alert-success .fas {
+        color: #F8FAFC; 
+    }
+
+    .h-100-flex {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .h-100-flex .scrollable-list {
+        flex-grow: 1; 
+    }
+    
+    .recommendation-enhanced {
+        text-align: center;
+    }
+
+    /* TODO: Kart içeriğinin kalan boşluğu doldurması için */
+    .flex-fill-body {
+        flex-grow: 1; 
+        display: flex; 
+        flex-direction: column;
+        min-height: 0; 
+    }
+
+    .center-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .h-100 {
+        height: 100% !important;
+    }
+
+    /* 1. Kartın tamamını dikey bir flex container yapar */
+    .kart-dikey-flex {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .kart-icerik-doldur {
+        flex-grow: 1;
+        position: relative;
+        min-height: 0; 
+    }
+
+    .scroll-alani-tam-sayfa {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto; 
+        padding: 1rem; 
+    }
+
+    .scroll-alani-tam-sayfa::-webkit-scrollbar {
+        width: 8px;
+    }
+    .scroll-alani-tam-sayfa::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+    }
+    .scroll-alani-tam-sayfa::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+    }
 </style>
 
 <div class="page-header" data-aos="fade-down">
@@ -416,173 +557,192 @@
 <div class="tab-content mt-4" id="myTabContent">
     <!-- Durum Tab -->
     <div class="tab-pane fade show active" id="durum" role="tabpanel">
-        <div class="row">
-            <!-- Left Column -->
-            <div class="col-lg-8">
-                <!-- Son 7 Gün -->
-                <div class="glass-card-enhanced" data-aos="fade-right">
+
+        <!-- Son Özet ve Not Ekle -->
+        <div class="row mb-4">
+            <!-- Sol Sütun: Son 7 Gün Özeti -->
+            <div class="col-lg-8 d-flex">
+                <div class="glass-card-enhanced kart-dikey-flex w-100" data-aos="fade-right">
+                    <!-- Başlık -->
                     <div class="card-header-gradient">
                         <h5><i class="fas fa-calendar-week"></i>Son 7 Gün Özeti</h5>
                     </div>
-                    
-                    @if (ViewBag.Son7GunKayitlari != null && ((List<AgizDisSagligiTakip.Core.Entities.HedefKaydi>)ViewBag.Son7GunKayitlari).Any())
-                    {
-                        <div class="activity-timeline">
-                            @foreach (var kayit in (List<AgizDisSagligiTakip.Core.Entities.HedefKaydi>)ViewBag.Son7GunKayitlari)
-                            {
-                                <div class="timeline-item">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="mb-1">@kayit.Hedef.Baslik</h6>
-                                            <small class="text-muted">
-                                                <i class="far fa-calendar me-1"></i>@kayit.Tarih.ToString("dd.MM.yyyy")
-                                                <i class="far fa-clock ms-2 me-1"></i>@kayit.Saat.ToString(@"hh\:mm")
-                                                @if (kayit.Sure.HasValue)
+
+                    <!-- İçerik Alanı -->
+                    <div class="kart-icerik-doldur">
+                        @if (ViewBag.Son7GunKayitlari != null && ((List<AgizDisSagligiTakip.Core.Entities.HedefKaydi>)ViewBag.Son7GunKayitlari).Any())
+                        {
+                            <div class="scroll-alani-tam-sayfa">
+                                <div class="activity-timeline">
+                                    @foreach (var kayit in (List<AgizDisSagligiTakip.Core.Entities.HedefKaydi>)ViewBag.Son7GunKayitlari)
+                                    {
+                                        <div class="timeline-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h6 class="mb-1">@kayit.Hedef.Baslik</h6>
+                                                    <small class="text-muted">
+                                                        <i class="far fa-calendar me-1"></i>@kayit.Tarih.ToString("dd.MM.yyyy")
+                                                        <i class="far fa-clock ms-2 me-1"></i>@kayit.Saat.ToString(@"hh\:mm")
+                                                        @if (kayit.Sure.HasValue)
+                                                        {
+                                                            <span class="ms-2">
+                                                                <i class="fas fa-stopwatch me-1"></i>@kayit.Sure dk
+                                                            </span>
+                                                        }
+                                                    </small>
+                                                </div>
+                                                @if (kayit.Uygulandi)
                                                 {
-                                                    <span class="ms-2">
-                                                        <i class="fas fa-stopwatch me-1"></i>@kayit.Sure dk
+                                                    <span class="badge badge-glass badge-priority-low">
+                                                        <i class="fas fa-check me-1"></i>Tamamlandı
                                                     </span>
                                                 }
-                                            </small>
+                                                else
+                                                {
+                                                    <span class="badge badge-glass badge-priority-high">
+                                                        <i class="fas fa-times me-1"></i>Yapılmadı
+                                                    </span>
+                                                }
+                                            </div>
                                         </div>
-                                        @if (kayit.Uygulandi)
-                                        {
-                                            <span class="badge badge-glass badge-priority-low">
-                                                <i class="fas fa-check me-1"></i>Tamamlandı
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge badge-glass badge-priority-high">
-                                                <i class="fas fa-times me-1"></i>Yapılmadı
-                                            </span>
-                                        }
-                                    </div>
+                                    }
                                 </div>
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p class="text-center text-muted">Henüz kayıt bulunmuyor.</p>
-                    }
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Kayıt yoksa gösterilecek mesaj -->
+                            <div class="scroll-alani-tam-sayfa d-flex justify-content-center align-items-center">
+                                <p class="text-muted mb-0">Henüz kayıt bulunmuyor.</p>
+                            </div>
+                        }
+                    </div>
                 </div>
+            </div>
 
-                <!-- Hedef Kayıt Formları -->
+            <!-- Sağ Sütun: Not Ekleme -->
+            <div class="col-lg-4 d-flex">
+                <div class="glass-card-enhanced h-100-flex w-100" data-aos="fade-left">
+                    <div class="card-header-gradient">
+                        <h5><i class="fas fa-sticky-note"></i>Not Ekle</h5>
+                    </div>
+
+                    <form asp-action="NotEkle" method="post" enctype="multipart/form-data" class="p-3 d-flex flex-column flex-grow-1">
+                        <div class="mb-3">
+                            <label class="form-label">Açıklama</label>
+                            <textarea name="Aciklama" class="form-control form-control-glass" rows="4"
+                                    placeholder="Bugünkü deneyiminizi yazın..." required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Görsel (İsteğe Bağlı)</label>
+                            <input type="file" name="GorselDosya" class="form-control form-control-glass"
+                                accept=".jpg,.jpeg,.png,.gif" />
+                            <div class="form-text" style="color: white;">JPG, JPEG, PNG veya GIF formatında</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-gradient w-100 mt-auto">
+                            <i class="fas fa-plus-circle me-2"></i>Not Ekle
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kalan Kartlar -->
+        <div class="row">
+            <!-- Sol Sütun: Hedef Kayıt Formları -->
+            <div class="col-lg-8">
                 @if (Model.Any())
                 {
                     <div class="glass-card-enhanced" data-aos="fade-right" data-aos-delay="100">
                         <div class="card-header-gradient">
                             <h5><i class="fas fa-clipboard-check"></i>Hedef Kayıt Formları</h5>
                         </div>
-                        
-                        @foreach (var hedef in Model)
-                        {
-                            <div class="target-card">
-                                <h6 class="mb-3 fw-bold">@hedef.Baslik</h6>
-                                <form asp-action="KayitEkle" method="post" class="row g-3">
-                                    <input type="hidden" name="HedefId" value="@hedef.Id" />
-                                    <div class="col-md-3">
-                                        <label class="form-label small">Tarih</label>
-                                        <input name="Tarih" type="date" class="form-control form-control-glass" value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small">Saat</label>
-                                        <input name="Saat" type="time" class="form-control form-control-glass" value="@DateTime.Now.ToString("HH:mm")" required />
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label small">Süre (dk)</label>
-                                        <input name="Sure" type="number" class="form-control form-control-glass" min="0" max="1440" placeholder="Dakika" />
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label small">Durum</label>
-                                        <select name="Uygulandi" class="form-select form-select-glass" required>
-                                            <option value="true">Yapıldı</option>
-                                            <option value="false">Yapılmadı</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label small">&nbsp;</label>
-                                        <button type="submit" class="btn btn-gradient w-100">
-                                            <i class="fas fa-save me-1"></i>Kaydet
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        }
+                        <div class="p-3">
+                            @foreach (var hedef in Model)
+                            {
+                                <div class="target-card">
+                                    <h6 class="mb-3 fw-bold">@hedef.Baslik</h6>
+                                    <form asp-action="KayitEkle" method="post" class="row g-3">
+                                        <input type="hidden" name="HedefId" value="@hedef.Id" />
+                                        <div class="col-md-3">
+                                            <label class="form-label small">Tarih</label>
+                                            <input name="Tarih" type="date" class="form-control form-control-glass" value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small">Saat</label>
+                                            <input name="Saat" type="time" class="form-control form-control-glass" value="@DateTime.Now.ToString("HH:mm")" required />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label small">Süre (dk)</label>
+                                            <input name="Sure" type="number" class="form-control form-control-glass" min="0" max="1440" placeholder="Dakika" />
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label small">Durum</label>
+                                            <select name="Uygulandi" class="form-select form-select-glass" required>
+                                                <option value="true">Yapıldı</option>
+                                                <option value="false">Yapılmadı</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="form-label small"> </label>
+                                            <button type="submit" class="btn btn-gradient w-100">
+                                                <i class="fas fa-save me-1"></i>Kaydet
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                        </div>
                     </div>
                 }
             </div>
 
-            <!-- Right Column -->
+            <!-- Sağ Sütun: Son Notlar -->
             <div class="col-lg-4">
-                <!-- Not Ekleme -->
-                <div class="glass-card-enhanced" data-aos="fade-left">
-                    <div class="card-header-gradient">
-                        <h5><i class="fas fa-sticky-note"></i>Not Ekle</h5>
-                    </div>
-                    
-                    <form asp-action="NotEkle" method="post" enctype="multipart/form-data">
-                        <div class="mb-3">
-                            <label class="form-label">Açıklama</label>
-                            <textarea name="Aciklama" class="form-control form-control-glass" rows="4" 
-                                      placeholder="Bugünkü deneyiminizi yazın..." required></textarea>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Görsel (İsteğe Bağlı)</label>
-                            <input type="file" name="GorselDosya" class="form-control form-control-glass" 
-                                   accept=".jpg,.jpeg,.png,.gif" />
-                            <div class="form-text">JPG, JPEG, PNG veya GIF formatında</div>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-gradient w-100">
-                            <i class="fas fa-plus-circle me-2"></i>Not Ekle
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Son Notlar -->
                 @if (ViewBag.Notlar != null && ((List<AgizDisSagligiTakip.Core.Entities.Not>)ViewBag.Notlar).Any())
                 {
-                    <div class="glass-card-enhanced mt-4" data-aos="fade-left" data-aos-delay="100">
+                    <div class="glass-card-enhanced mt-4 mt-lg-0" data-aos="fade-left" data-aos-delay="100">
                         <div class="card-header-gradient">
                             <h5><i class="fas fa-history"></i>Son Notlar</h5>
                         </div>
-                        
-                        @foreach (var not in (List<AgizDisSagligiTakip.Core.Entities.Not>)ViewBag.Notlar)
-                        {
-                            <div class="note-card">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <small class="text-muted">
-                                        <i class="far fa-clock me-1"></i>
-                                        @not.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")
-                                    </small>
-                                    <form asp-action="NotSil" method="post" style="display: inline;">
-                                        <input type="hidden" name="id" value="@not.Id" />
-                                        <button type="submit" class="btn btn-delete-glass btn-sm" 
-                                                onclick="return confirm('Bu notu silmek istediğinizden emin misiniz?')">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                                
-                                @if (!string.IsNullOrEmpty(not.GorselYolu))
-                                {
-                                    <div class="note-image">
-                                        <img src="@not.GorselYolu" alt="Not görseli" class="img-fluid" 
-                                             onclick="window.open('@not.GorselYolu', '_blank')" />
+                        <div class="scrollable-list p-3">
+                            @foreach (var not in (List<AgizDisSagligiTakip.Core.Entities.Not>)ViewBag.Notlar)
+                            {
+                                <div class="note-card">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <small class="text-muted">
+                                            <i class="far fa-clock me-1"></i>
+                                            @not.OlusturmaTarihi.ToString("dd.MM.yyyy HH:mm")
+                                        </small>
+                                        <form asp-action="NotSil" method="post" style="display: inline;">
+                                            <input type="hidden" name="id" value="@not.Id" />
+                                            <button type="submit" class="btn btn-delete-glass btn-sm"
+                                                    onclick="return confirm('Bu notu silmek istediğinizden emin misiniz?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
                                     </div>
-                                }
-                                
-                                <p class="mb-0">@not.Aciklama</p>
-                            </div>
-                        }
+
+                                    @if (!string.IsNullOrEmpty(not.GorselYolu))
+                                    {
+                                        <div class="note-image">
+                                            <img src="@not.GorselYolu" alt="Not görseli" class="img-fluid"
+                                                onclick="window.open('@not.GorselYolu', '_blank')" />
+                                        </div>
+                                    }
+
+                                    <p class="mb-0">@not.Aciklama</p>
+                                </div>
+                            }
+                        </div>
                     </div>
                 }
             </div>
         </div>
     </div>
+
 
     <!-- Hedefler Tab -->
     <div class="tab-pane fade" id="hedefler" role="tabpanel">
@@ -622,7 +782,7 @@
                                     <form asp-action="HedefSil" method="post" class="ms-3">
                                         <input type="hidden" name="id" value="@hedef.Id" />
                                         <button type="submit" class="btn btn-delete-glass" 
-                                                onclick="return hedefSilOnay(@hedef.Id, '@hedef.Baslik')">
+                                                onclick="hedefSilOnay(event, @hedef.Id, '@hedef.Baslik')">
                                             <i class="fas fa-trash-alt me-1"></i>Sil
                                         </button>
                                     </form>
@@ -694,9 +854,16 @@
 
 <script>
     // Hedef silme onayı
-    function hedefSilOnay(hedefId, hedefBaslik) {
+    function hedefSilOnay(event, hedefId, hedefBaslik) {
+        event.preventDefault(); // Formun hemen gönderilmesini engelle
+
         fetch('/Hedef/HedefKayitKontrol?id=' + hedefId)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 let mesaj = '';
                 if (data.kayitSayisi > 0) {
@@ -708,16 +875,16 @@
                 }
                 
                 if (confirm(mesaj)) {
-                    document.querySelector(`form input[value="${hedefId}"]`).closest('form').submit();
+                    // Kullanıcı onaylarsa formu gönder
+                    event.target.closest('form').submit();
                 }
             })
             .catch(error => {
                 console.error('Hata:', error);
-                if (confirm(`"${hedefBaslik}" hedefini silmek istediğinizden emin misiniz?`)) {
-                    document.querySelector(`form input[value="${hedefId}"]`).closest('form').submit();
+                // Fetch hatası olsa bile kullanıcıya sormaya devam et
+                if (confirm(`"${hedefBaslik}" hedefini silerken bir hata oluştu, yine de silmeyi denemek ister misiniz?`)) {
+                    event.target.closest('form').submit();
                 }
             });
-        
-        return false;
     }
 </script>

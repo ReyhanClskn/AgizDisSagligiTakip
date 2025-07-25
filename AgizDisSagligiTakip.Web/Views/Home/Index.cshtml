@@ -12,8 +12,8 @@
         position: relative;
         overflow: hidden;
         margin: -2rem -12px 4rem;
-        padding: 6rem 12px 4rem 12px; /* Üst padding artırıldı */
-        margin-top: 20px; /* Header'dan boşluk */
+        padding: 6rem 12px 4rem 12px;
+        margin-top: 20px;
     }
     
     /* Tooth Image Background */
@@ -66,6 +66,7 @@
     .hero-content {
         position: relative;
         z-index: 2;
+        text-align: center; 
     }
     
     .hero-content h1 {
@@ -327,8 +328,8 @@
             <img src="~/uploads/teeth.jpg" alt="Tooth Background" />
         </div>
         <div class="container position-relative">
-            <div class="row align-items-center">
-                <div class="col-lg-8" data-aos="fade-right">
+            <div class="row justify-content-center"> 
+                <div class="col-lg-10" data-aos="fade-up"> 
                     <div class="hero-content">
                         <h1>Hoş Geldin!</h1>
                         <h2 class="h3 mb-4 text-primary">@Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")</h2>

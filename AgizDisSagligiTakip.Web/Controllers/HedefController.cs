@@ -36,10 +36,10 @@ namespace AgizDisSagligiTakip.Web.Controllers
             var son7Gun = DateTime.Today.AddDays(-6);
             var son7GunKayitlari = _context.HedefKayitlari
                 .Include(hk => hk.Hedef)
-                .Where(hk => hk.Hedef.KullaniciId == kullaniciId && hk.Tarih >= son7Gun)
+                .Where(hk => hk.Hedef.KullaniciId == kullaniciId && hk.Tarih >= son7Gun && hk.Tarih <= DateTime.Today)
                 .OrderByDescending(hk => hk.Tarih)
                 .ThenByDescending(hk => hk.Saat)
-                .Take(10)
+                .Take(10) 
                 .ToList();
 
             // Kullanıcının notları
@@ -97,7 +97,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
         // POST: Hedef/HedefSil
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult HedefSil(int id)
+        public async Task<IActionResult> HedefSil(int id)
         {
             var kullaniciId = HttpContext.Session.GetInt32("KullaniciId");
             if (kullaniciId == null)
@@ -105,26 +105,33 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 return RedirectToAction("Giris", "Kullanici");
             }
 
-            var hedef = _context.Hedefler
-                .Include(h => h.HedefKayitlari)
-                .FirstOrDefault(h => h.Id == id && h.KullaniciId == kullaniciId);
-
-            if (hedef != null)
+            try
             {
-                // Hedefin kayıtları varsa tüm kayıtları da sil
-                if (hedef.HedefKayitlari.Any())
+                // Hedefi getir (cascade delete otomatik olarak ilişkili kayıtları silecek)
+                var hedef = await _context.Hedefler
+                    .FirstOrDefaultAsync(h => h.Id == id && h.KullaniciId == kullaniciId);
+
+                if (hedef != null)
                 {
-                    _context.HedefKayitlari.RemoveRange(hedef.HedefKayitlari);
+                    var hedefBaslik = hedef.Baslik;
+                    
+                    // Hedefi sil (cascade delete sayesinde ilişkili kayıtlar otomatik silinir)
+                    _context.Hedefler.Remove(hedef);
+                    
+                    // Değişiklikleri kaydet
+                    await _context.SaveChangesAsync();
+                    
+                    TempData["BasariMesaji"] = $"'{hedefBaslik}' hedefi ve ilgili tüm kayıtlar başarıyla silindi!";
                 }
-
-                _context.Hedefler.Remove(hedef);
-                _context.SaveChanges();
-                
-                TempData["BasariMesaji"] = "Hedef ve ilgili tüm kayıtlar başarıyla silindi!";
+                else
+                {
+                    TempData["HataMesaji"] = "Hedef bulunamadı veya silme yetkiniz yok.";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                TempData["HataMesaji"] = "Hedef bulunamadı veya silme yetkiniz yok.";
+                TempData["HataMesaji"] = "Hedef silinirken bir hata oluştu. Lütfen tekrar deneyin.";
+                Console.WriteLine($"Hedef silme hatası: {ex.Message}");
             }
 
             return RedirectToAction("Index");
@@ -174,7 +181,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: Hedef/NotEkle TODO:
+        // POST: Hedef/NotEkle
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotEkle(string Aciklama, IFormFile? GorselDosya)
@@ -241,7 +248,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: Hedef/NotSil TODO:
+        // POST: Hedef/NotSil
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NotSil(int id)
@@ -277,7 +284,7 @@ namespace AgizDisSagligiTakip.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Hedef/HedefKayitKontrol TODO:
+        // GET: Hedef/HedefKayitKontrol
         public JsonResult HedefKayitKontrol(int id)
         {
             var kullaniciId = HttpContext.Session.GetInt32("KullaniciId");
