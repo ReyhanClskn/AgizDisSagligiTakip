@@ -33,19 +33,13 @@ namespace AgizDisSagligiTakip.Web.Controllers
                 
                 // Son 7 gün kayıtları
                 var son7Gun = DateTime.Today.AddDays(-6);
+                
                 var son7GunKayitlari = _context.HedefKayitlari
-                    .Include(hk => hk.Hedef)
+                    .Include(hk => hk.Hedef) 
                     .Where(hk => hk.Hedef.KullaniciId == kullaniciId && hk.Tarih >= son7Gun)
                     .OrderByDescending(hk => hk.Tarih)
                     .ThenByDescending(hk => hk.Saat)
                     .Take(5) // Son 5 kayıt
-                    .Select(hk => new {
-                        HedefBaslik = hk.Hedef.Baslik,
-                        Tarih = hk.Tarih.ToString("dd.MM.yyyy"),
-                        Saat = hk.Saat.ToString(@"hh\:mm"),
-                        Sure = hk.Sure.HasValue ? hk.Sure.Value + " dk" : "",
-                        Uygulandi = hk.Uygulandi ? "✓" : "✗"
-                    })
                     .ToList();
                 
                 ViewBag.Son7GunKayitlari = son7GunKayitlari;

@@ -9,11 +9,18 @@
         min-height: 80vh;
         display: flex;
         align-items: center;
+        justify-content: center; 
         position: relative;
         overflow: hidden;
         margin: -2rem -12px 4rem;
         padding: 6rem 12px 4rem 12px;
         margin-top: 20px;
+        
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
     }
     
     /* Tooth Image Background */
@@ -66,13 +73,12 @@
     .hero-content {
         position: relative;
         z-index: 2;
-        text-align: center; 
     }
     
     .hero-content h1 {
         font-size: 4rem;
         font-weight: 800;
-        background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 50%, #10B981 100%);
+        background: linear-gradient(135deg, #f2fdff 0%, #7fc1dd 50%, #05795a 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -120,6 +126,8 @@
         transform: rotate(45deg);
         transition: all 0.5s ease;
         opacity: 0;
+        pointer-events: none;
+        z-index: -1;
     }
     
     .glass-card:hover::before {
@@ -184,6 +192,8 @@
         height: 200%;
         background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 50%);
         animation: pulse 4s ease-in-out infinite;
+        pointer-events: none;
+        z-index: -1;
     }
     
     .stats-number {
@@ -202,6 +212,12 @@
         margin: 4rem 0;
         position: relative;
         overflow: hidden;
+        
+        /* --- İSTEK ÜZERİNE EKLENDİ: Cam efekti eklendi --- */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        /* --- DEĞİŞİKLİK SONU --- */
     }
     
     .cta-section::before {
@@ -214,11 +230,13 @@
         background: radial-gradient(circle, rgba(0, 217, 255, 0.3) 0%, transparent 60%);
         filter: blur(60px);
         animation: ctaFloat 8s ease-in-out infinite;
+        pointer-events: none;
+        z-index: -1;
     }
     
     /* Button Styles */
     .btn-gradient {
-        background: linear-gradient(135deg, #00D9FF 0%, #7C3AED 100%);
+        background: linear-gradient(135deg, #2b2653 0%, #307a95 100%);
         border: none;
         color: white;
         padding: 1rem 3rem;
@@ -239,7 +257,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, #7C3AED 0%, #00D9FF 100%);
+        background: linear-gradient(135deg, #9aa8c9 0%, #90bcae 100%);
         opacity: 0;
         transition: opacity 0.3s ease;
         z-index: -1;
@@ -295,6 +313,10 @@
         font-weight: 600;
     }
     
+    .activity-item small {
+        color: rgba(255, 255, 255, 0.7) !important;
+    }
+    
     .badge-success {
         background: rgba(16, 185, 129, 0.2);
         color: #10B981;
@@ -327,13 +349,13 @@
         <div class="tooth-bg">
             <img src="~/uploads/teeth.jpg" alt="Tooth Background" />
         </div>
-        <div class="container position-relative">
-            <div class="row justify-content-center"> 
-                <div class="col-lg-10" data-aos="fade-up"> 
+        <div class="container position-relative" data-aos="fade-right">
+            <div class="row align-items-center">
+                <div class="col-lg-12 text-center">
                     <div class="hero-content">
                         <h1>Hoş Geldin!</h1>
                         <h2 class="h3 mb-4 text-primary">@Context.Session.GetString("KullaniciAd") @Context.Session.GetString("KullaniciSoyad")</h2>
-                        <p class="lead">Gülüşünüzün sağlığı, parmağınızın ucunda!</p>
+                        <p class="lead mb-4">Gülüşünüzün sağlığı, parmağınızın ucunda!</p>
                         <a asp-controller="Hedef" asp-action="Index" class="btn btn-gradient btn-lg">
                             <i class="fas fa-chart-line me-2"></i>Sağlık Takibine Git
                         </a>
@@ -386,22 +408,22 @@
                     </h4>
                     @if (ViewBag.Son7GunKayitlari != null)
                     {
-                        @foreach (dynamic kayit in ViewBag.Son7GunKayitlari)
+                        @foreach (var kayit in (List<AgizDisSagligiTakip.Core.Entities.HedefKaydi>)ViewBag.Son7GunKayitlari)
                         {
                             <div class="activity-item">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <strong>@kayit.HedefBaslik</strong>
-                                        <small class="d-block text-muted">
-                                            @kayit.Tarih • @kayit.Saat
-                                            @if (!string.IsNullOrEmpty(kayit.Sure))
+                                        <strong>@kayit.Hedef.Baslik</strong>
+                                        <small class="d-block text-muted" style="color: rgba(255, 255, 255, 0.7) !important;">
+                                            @kayit.Tarih.ToString("dd.MM.yyyy") • @kayit.Saat.ToString(@"hh\:mm")
+                                            @if (kayit.Sure.HasValue)
                                             {
-                                                <span>(@kayit.Sure)</span>
+                                                <span>(@kayit.Sure dk)</span>
                                             }
                                         </small>
                                     </div>
-                                    <span class="activity-badge @(kayit.Uygulandi.Contains("✓") ? "badge-success" : "badge-warning")">
-                                        @kayit.Uygulandi
+                                    <span class="activity-badge @(kayit.Uygulandi ? "badge-success" : "badge-warning")">
+                                        @(kayit.Uygulandi ? "✓ Tamamlandı" : "⚠ Yapılmadı")
                                     </span>
                                 </div>
                             </div>
@@ -424,11 +446,11 @@ else
         <div class="tooth-bg">
             <img src="~/uploads/teeth.jpg" alt="Tooth Background" />
         </div>
-        <div class="container position-relative">
-            <div class="text-center hero-content" data-aos="zoom-in">
+        <div class="container position-relative" data-aos="zoom-in">
+            <div class="text-center hero-content">
                 <h1 class="mb-4">Güzellik detaylarda, detaylar gülüşünüzde.</h1>
                 <p class="lead mb-5">Akıllı öneri destekli diş sağlığı takip sistemi ile sağlıklı bir gülüşe kavuşun</p>
-                <div class="d-flex gap-3 justify-content-center">
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
                     <a asp-controller="Kullanici" asp-action="Kayit" class="btn btn-gradient btn-lg">
                         <i class="fas fa-rocket me-2"></i>Hemen Başla
                     </a>
