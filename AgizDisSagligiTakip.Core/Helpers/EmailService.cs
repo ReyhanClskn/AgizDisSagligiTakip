@@ -7,8 +7,8 @@ namespace AgizDisSagligiTakip.Core.Helpers
     {
         private readonly string _smtpServer = "smtp.gmail.com";
         private readonly int _smtpPort = 587;
-        private readonly string _fromEmail = "*****@gmail.com";
-        private readonly string _fromPassword = "*******"; //app password TODO: delete before commit
+        private readonly string _fromEmail = "*@gmail.com";
+        private readonly string _fromPassword = "*"; //app password TODO: delete before commit
 
         public async Task<bool> KayitMailiGonderAsync(string toEmail, string kullaniciAdi)
         {

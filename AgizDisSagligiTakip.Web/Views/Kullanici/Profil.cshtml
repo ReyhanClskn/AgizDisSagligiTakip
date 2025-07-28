@@ -344,17 +344,7 @@
 
 <!-- Modal Backdrop Fix -->
 <style>
-    .modal-backdrop {
-        z-index: 1040 !important;
-    }
-    
-    .modal {
-        z-index: 1050 !important;
-    }
-    
-    .modal-dialog {
-        z-index: 1060 !important;
-    }
+
     
     /* Cropper container beyaz arka plan */
     #cropModal .modal-content {
@@ -529,80 +519,6 @@
     </div>
 </div>
 
-<!-- Crop Modal -->
-<div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true" data-bs-backdrop="false">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="background-color: #ffffff !important;">
-            <div class="modal-header" style="background-color: #f8f9fa !important; border-bottom: 1px solid #dee2e6 !important;">
-                <h5 class="modal-title" id="cropModalLabel" style="color: #000000 !important;">Profil Fotoğrafını Düzenle</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: none !important;"></button>
-            </div>
-            <div class="modal-body" style="background-color: #ffffff !important;">
-                <div id="cropperContainer">
-                    <img id="cropperImage" style="max-width: 100%;">
-                </div>
-            </div>
-            <div class="modal-footer" style="background-color: #f8f9fa !important; border-top: 1px solid #dee2e6 !important;">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-primary" id="cropBtn">Kırp ve Kaydet</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Hesap Silme Onay Modal -->
-<div class="modal fade" id="hesapSilModal" tabindex="-1" aria-labelledby="hesapSilModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header modal-header-danger">
-                <h5 class="modal-title" id="hesapSilModalLabel">
-                    <i class="fas fa-exclamation-triangle me-2"></i>Hesap Silme Onayı
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-danger">
-                    <strong>DİKKAT!</strong> Bu işlem geri alınamaz!
-                </div>
-                
-                <div class="warning-list">
-                    <strong>Silinecek veriler:</strong>
-                    <ul class="mt-2">
-                        <li>Tüm kişisel bilgileriniz</li>
-                        <li>Belirlediğiniz tüm hedefler</li>
-                        <li>Hedef takip kayıtlarınız</li>
-                        <li>Eklediğiniz tüm notlar ve fotoğraflar</li>
-                        <li>Tüm sağlık takip geçmişiniz</li>
-                    </ul>
-                </div>
-
-                <p class="text-center mt-3 mb-0">
-                    <strong>Hesabınızı silmek istediğinizden emin misiniz?</strong>
-                </p>
-                
-                <form id="hesapSilForm" class="mt-3">
-                    <div class="mb-3">
-                        <label for="sifreOnay" class="form-label">Onaylamak için şifrenizi girin:</label>
-                        <input type="password" class="form-control" id="sifreOnay" name="mevcutSifre" required>
-                        <div class="invalid-feedback">
-                            Lütfen şifrenizi girin.
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                <button type="button" class="btn btn-danger" id="hesapSilBtn">
-                    <span id="btnText">Hesabımı Kalıcı Olarak Sil</span>
-                    <span id="btnSpinner" class="spinner-border spinner-border-sm d-none" role="status">
-                        <span class="visually-hidden">Yükleniyor...</span>
-                    </span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @section Scripts {
     <!-- Cropper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
@@ -628,7 +544,7 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         $('#cropperImage').attr('src', e.target.result);
-                        $('.modal-backdrop').remove();
+                        
                         cropModal.show();
                     };
                     reader.readAsDataURL(file);
@@ -637,7 +553,7 @@
 
             // Modal açılmadan önce backdrop kontrolü
             $('#cropModal').on('show.bs.modal', function () {
-                $('.modal-backdrop').remove();
+                
             });
 
             // Crop modal açıldığında
