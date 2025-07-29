@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
     <ProjectReference Include="..\AgizDisSagligiTakip.Business\AgizDisSagligiTakip.Business.csproj" />
@@ -16,6 +16,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>a217cddb-68db-4648-87a4-5d3516fe19c6</UserSecretsId>
   </PropertyGroup>
 
 </Project>
