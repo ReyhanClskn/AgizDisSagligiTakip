@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agiz-dis-sagligi-web
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=db;Database=AgizDisSagligiDB;User=sa;Password=Test123456!;TrustServerCertificate=true
+      - EmailSettings__Host=smtp.gmail.com
+      - EmailSettings__Port=587
+      - EmailSettings__Username=test@example.com
+      - EmailSettings__Password=test123
+    depends_on:
+      - db
+    networks:
+      - agiz-dis-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: agiz-dis-sagligi-db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Test123456!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    networks:
+      - agiz-dis-network
+
+networks:
+  agiz-dis-network:
+    driver: bridge
+
+volumes:
+  mssql-data:
